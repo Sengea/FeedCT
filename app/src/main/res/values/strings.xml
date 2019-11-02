@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FeedCT</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Pesquisar</string>
+    <string name="todas_section_format">%s %dº SEM</string>
+</resources>

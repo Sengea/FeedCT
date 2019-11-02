@@ -1,0 +1,1100 @@
+﻿[
+    {
+      "inscrito": true,
+      "sigla": "AM1",
+      "nome": "Análise Matemática I",
+      "departamento": "DM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.7
+    },
+    {
+      "inscrito": true,
+      "sigla": "ALGA",
+      "nome": "Álgebra Linear e Geometria Analítica",
+      "departamento": "DM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.1
+    },
+    {
+      "inscrito": true,
+      "sigla": "IP",
+      "nome": "Introdução à Programação",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 9,
+      "rating": 0.8
+    },
+    {
+      "inscrito": true,
+      "sigla": "SL",
+      "nome": "Sistemas Lógicos",
+      "departamento": "DEE",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "AM2E",
+      "nome": "Análise Matemática II E",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "AC",
+      "nome": "Arquitetura de Computadores",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 9,
+      "rating": 0.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "MD",
+      "nome": "Matemática Discreta",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "POO",
+      "nome": "Programação Orientada pelos Objetos",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 9,
+      "rating": 4
+    },
+    {
+      "inscrito": false,
+      "sigla": "AED",
+      "nome": "Algoritmos e Estruturas de Dados",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 9,
+      "rating": 2
+    },
+    {
+      "inscrito": false,
+      "sigla": "F",
+      "nome": "Física",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 5
+    },
+    {
+      "inscrito": false,
+      "sigla": "FSO",
+      "nome": "Fundamentos de Sistemas de Operação",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 9,
+      "rating": 3.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "LC",
+      "nome": "Lógica Computacional",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "BD",
+      "nome": "Bases de Dados",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 9,
+      "rating": 0.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "LAP",
+      "nome": "Linguagens e Ambientes de Programação",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "PEE",
+      "nome": "Probabilidades e Estatística E",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "TC",
+      "nome": "Teoria da Computação",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "CGI",
+      "nome": "Computação Gráfica e Interfaces",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "IA",
+      "nome": "Inteligência Artificial",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "MDS",
+      "nome": "Métodos de Desenvolvimento de Software",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "RC",
+      "nome": "Redes de Computadores",
+      "departamento": "DI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "ADA",
+      "nome": "Análise e Desenho de Algoritmos",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "SD",
+      "nome": "Sistemas Distribuídos",
+      "departamento": "DI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "ATA",
+      "nome": "Abastecimento e Tratamento de Águas",
+      "departamento": "DCEA",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "ABS",
+      "nome": "Ambiente e Desenvolvimento Sustentável",
+      "departamento": "DCEA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 0.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "GRH",
+      "nome": "Gestão de Recursos Hídricos",
+      "departamento": "DCEA",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "GR",
+      "nome": "Gestão de Resíduos",
+      "departamento": "DCEA",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "GAO",
+      "nome": "Gestão do Ambiente nas Organizações",
+      "departamento": "DCEA",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "BA",
+      "nome": "Bioquímica Ambiental",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 2
+    },
+    {
+      "inscrito": false,
+      "sigla": "BGC",
+      "nome": "Bioquímica Geral C",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "EB1",
+      "nome": "Engenharia Bioquímica I",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "E",
+      "nome": "Enzimologia",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "F",
+      "nome": "Fotoquímica",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "IQB",
+      "nome": "Indústrias Químicas e Biológicas",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "Q",
+      "nome": "Quimio-informática",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 1.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "QB",
+      "nome": "Química B",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "QF",
+      "nome": "Química Forense",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1
+    },
+    {
+      "inscrito": false,
+      "sigla": "QI",
+      "nome": "Química Inorgânica (CR)",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "QOGB",
+      "nome": "Química Orgânica Geral B",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "TPQ",
+      "nome": "Tecnologias e Processos Químicos",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "TLQV",
+      "nome": "Tecnologias Limpas e Química Verde",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "EBR",
+      "nome": "Efeitos Biológicos da Radiação",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 3
+    },
+    {
+      "inscrito": false,
+      "sigla": "CP",
+      "nome": "Ciência dos Polímeros",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "E",
+      "nome": "Electrobiotecnologia",
+      "departamento": "DQ",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 1.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "MIA",
+      "nome": "Métodos Instrumentais de Análise",
+      "departamento": "DQ",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "MS",
+      "nome": "Modelação de Sistemas",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "MAD",
+      "nome": "Modelos de Apoio à Decisão",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "CF",
+      "nome": "Cálculo Financeiro",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 0.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "ENC",
+      "nome": "Estatística Numérica Computacional",
+      "departamento": "DM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "CC",
+      "nome": "Computabilidade e Complexidade",
+      "departamento": "DM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "C",
+      "nome": "Criptografia",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "AC",
+      "nome": "Álgebra Computacional",
+      "departamento": "DM",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 1.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "ECT",
+      "nome": "Engenharia de Células e Tecidos",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "FA",
+      "nome": "Física Atómica",
+      "departamento": "DF",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "FES",
+      "nome": "Física do Estado Sólido",
+      "departamento": "DF",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "FE",
+      "nome": "Física Estatística",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "I",
+      "nome": "Imagiologia",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "MQ",
+      "nome": "Mecânica Quântica",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "MIM",
+      "nome": "Métodos de Imagem Médica",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "FM",
+      "nome": "Física Molecular",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "C",
+      "nome": "Criogenia",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 1,
+      "rating": 4
+    },
+    {
+      "inscrito": false,
+      "sigla": "TE",
+      "nome": "Técnicas de Espetroscopia",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "MMF",
+      "nome": "Métodos Matemáticos da Física",
+      "departamento": "DF",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "DAC",
+      "nome": "Desenho Assistido por Computador",
+      "departamento": "DEMI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "EA",
+      "nome": "Energia e Ambiente",
+      "departamento": "DEMI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "FE",
+      "nome": "Finanças para Empreendedores",
+      "departamento": "DEMI",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 3.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "GP",
+      "nome": "Gestão da Produção",
+      "departamento": "DEMI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "GQ",
+      "nome": "Gestão da Qualidade",
+      "departamento": "DEMI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "GP",
+      "nome": "Gestão de Projetos",
+      "departamento": "DEMI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "MI",
+      "nome": "Marketing e Inovação",
+      "departamento": "DEMI",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "PAFED",
+      "nome": "Processos Avançados de Fabrico e Ensaios não Destrutivos",
+      "departamento": "DEMI",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "SHO",
+      "nome": "Segurança e Higiene Ocupacionais",
+      "departamento": "DEMI",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "IT",
+      "nome": "Introdução às Telecomunicações",
+      "departamento": "DEE",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "EV",
+      "nome": "Empresas Virtuais",
+      "departamento": "DEE",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "PISF",
+      "nome": "Projeto de Instalações Solares e Fotovoltaicas",
+      "departamento": "DEE",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2
+    },
+    {
+      "inscrito": false,
+      "sigla": "SS",
+      "nome": "Sistemas Sensoriais",
+      "departamento": "DEE",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "CSD",
+      "nome": "Conceção de Sistemas Digitais",
+      "departamento": "DEE",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "EMSBM",
+      "nome": "Electrónica para Micro-Sistemas Biomédicos e Multimédia",
+      "departamento": "DEE",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "A",
+      "nome": "Arquitetura",
+      "departamento": "DEC",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 3.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "DAC",
+      "nome": "Desenho Assistido por Computador",
+      "departamento": "DEC",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 2
+    },
+    {
+      "inscrito": false,
+      "sigla": "DT",
+      "nome": "Desenho Técnico",
+      "departamento": "DEC",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 3.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "E",
+      "nome": "Estática",
+      "departamento": "DEC",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "MEF",
+      "nome": "Método dos Elementos Finitos",
+      "departamento": "DEC",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "MC1",
+      "nome": "Materiais de Construção I",
+      "departamento": "DEC",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "BCC",
+      "nome": "Biologia Celular C",
+      "departamento": "DCV",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "IB",
+      "nome": "Introdução à Biologia",
+      "departamento": "DCV",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "PEB",
+      "nome": "Produção de Energia a partir da Biomassa",
+      "departamento": "DCTB",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "PUBL",
+      "nome": "Produção e Utilização de Biocombustíveis Líquidos",
+      "departamento": "DCTB",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "QBA",
+      "nome": "Química e Bioquímica dos Alimentos",
+      "departamento": "DCTB",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 2.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "TA",
+      "nome": "Toxicologia Alimentar",
+      "departamento": "DCTB",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "GG",
+      "nome": "Geologia Geral",
+      "departamento": "DCT",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "GQA",
+      "nome": "Gestão e Qualidade da Água",
+      "departamento": "DCT",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4
+    },
+    {
+      "inscrito": false,
+      "sigla": "H",
+      "nome": "Hidrogeologia",
+      "departamento": "DCT",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "PAS",
+      "nome": "Produção Agro-industrial e Sustentabilidade",
+      "departamento": "DCT",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 2.5
+    },
+    {
+      "inscrito": false,
+      "sigla": "TP",
+      "nome": "Tecnologia de Pedreiras",
+      "departamento": "DCT",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "MPA",
+      "nome": "Matérias-Primas Alimentares",
+      "departamento": "DCT",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "FSPAI",
+      "nome": "Factores de Stress e Produtividade Agro-Industrial",
+      "departamento": "DCT",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 3.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "GTD",
+      "nome": "Geostatística e Tratamento de Dados",
+      "departamento": "DCT",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 0.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "GE",
+      "nome": "Gestão de Empresas",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 4.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "HTE",
+      "nome": "História da Tecnologia e da Engenharia",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 0.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "HC",
+      "nome": "História das Ciências",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 2.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "MG",
+      "nome": "Macroeconomia e Globalização",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 3.9
+    },
+    {
+      "inscrito": false,
+      "sigla": "PC",
+      "nome": "Pensamento Contemporâneo",
+      "departamento": "DCSA",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 1
+    },
+    {
+      "inscrito": false,
+      "sigla": "SNTI",
+      "nome": "Sociologia das Novas Tecnologias de Informação",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 1.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "SO",
+      "nome": "Sociologia das Organizações",
+      "departamento": "DCSA",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 1.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "SEI",
+      "nome": "Sócio-Economia da Inovação",
+      "departamento": "DCSA",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 2.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "M",
+      "nome": "Microeconomia",
+      "departamento": "DCSA",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 1.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "HAC",
+      "nome": "História da Arte Contemporânea",
+      "departamento": "DCR",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "HAIM",
+      "nome": "História da Arte da Idade Moderna",
+      "departamento": "DCR",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "HVC",
+      "nome": "História do Vidro e da Cerâmica",
+      "departamento": "DCR",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 0.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "SI",
+      "nome": "Seminário de Iconografia",
+      "departamento": "DCR",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 4.3
+    },
+    {
+      "inscrito": false,
+      "sigla": "SADC1",
+      "nome": "Seminário em Arte, Design e Ciência I",
+      "departamento": "DCR",
+      "semestre": 1,
+      "creditos": 3,
+      "rating": 4.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "SADC2",
+      "nome": "Seminário em Arte, Design e Ciência II",
+      "departamento": "DCR",
+      "semestre": 2,
+      "creditos": 3,
+      "rating": 2.1
+    },
+    {
+      "inscrito": false,
+      "sigla": "B",
+      "nome": "Biomateriais",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 3.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "B",
+      "nome": "Biossensores",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1.4
+    },
+    {
+      "inscrito": false,
+      "sigla": "CM",
+      "nome": "Ciência dos Materiais",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.6
+    },
+    {
+      "inscrito": false,
+      "sigla": "MCCE",
+      "nome": "Materiais para a Conversão e Conservação de Energia",
+      "departamento": "DCM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 3.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "QP",
+      "nome": "Química dos Polímeros",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "TN",
+      "nome": "Tecnologia de Nanomateriais",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 1
+    },
+    {
+      "inscrito": false,
+      "sigla": "M1",
+      "nome": "Microeletrónica I",
+      "departamento": "DCM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 1.8
+    },
+    {
+      "inscrito": false,
+      "sigla": "MSI",
+      "nome": "Materiais e Sistemas Inteligentes",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 4.2
+    },
+    {
+      "inscrito": false,
+      "sigla": "GEI",
+      "nome": "Gravação Eletrónica de Informação",
+      "departamento": "DCM",
+      "semestre": 1,
+      "creditos": 6,
+      "rating": 0.7
+    },
+    {
+      "inscrito": false,
+      "sigla": "FM",
+      "nome": "Fotónica em Materiais",
+      "departamento": "DCM",
+      "semestre": 2,
+      "creditos": 6,
+      "rating": 2.3
+    }
+]
