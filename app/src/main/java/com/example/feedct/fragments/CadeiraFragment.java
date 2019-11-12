@@ -49,17 +49,17 @@ public class CadeiraFragment extends Fragment {
 
         atendimentoDocente = JSONManager.atendimentoDocentesByCadeira.get(cadeira.getNome());
 
-        TextView nome = view.findViewById(R.id.textViewNome);
-        TextView departamento = view.findViewById(R.id.textViewDepartamento);
-        TextView semestre = view.findViewById(R.id.textViewSemestre);
-        TextView ects = view.findViewById(R.id.textViewECTS);
-        RatingBar ratingBar = view.findViewById(R.id.ratingBar);
+        TextView nomeTextView = view.findViewById(R.id.textViewNome);
+        TextView departamentoTextView = view.findViewById(R.id.textViewDepartamento);
+        TextView semestreTextView = view.findViewById(R.id.textViewSemestre);
+        TextView ectsTextView = view.findViewById(R.id.textViewECTS);
+        RatingBar ratingBarTextView = view.findViewById(R.id.ratingBar);
 
-        nome.setText(cadeira.getNome());
-        departamento.setText(cadeira.getDepartamento());
-        semestre.setText(cadeira.getSemestre() + "º");
-        ects.setText(String.valueOf(cadeira.getCreditos()));
-        ratingBar.setRating(cadeira.getRating());
+        nomeTextView.setText(cadeira.getNome());
+        departamentoTextView.setText(cadeira.getDepartamento());
+        semestreTextView.setText(cadeira.getSemestre() + "º");
+        ectsTextView.setText(String.valueOf(cadeira.getCreditos()));
+        ratingBarTextView.setRating(cadeira.getRating());
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewAtendimentoDocente);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -84,10 +84,16 @@ public class CadeiraFragment extends Fragment {
             }
         }
 
-        if (currentCadeiraUser == null)
+        final TextView turnoTextView = view.findViewById(R.id.textViewTurno);
+        if (currentCadeiraUser == null) {
             actionButtonInscrever.show();
-        else
+            turnoTextView.setVisibility(View.INVISIBLE);
+        }
+        else {
             actionButtonDesinscrever.show();
+            turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
+            turnoTextView.setVisibility(View.VISIBLE);
+        }
 
         actionButtonInscrever.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +110,12 @@ public class CadeiraFragment extends Fragment {
                 builder.setPositiveButton("Inscrever", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int turno = numberPicker.getValue();
-                        currentCadeiraUser = new CadeiraUser(cadeira.getNome(), Session.userEmail);
+                        String turno = String.valueOf(numberPicker.getValue());
+                        currentCadeiraUser = new CadeiraUser(cadeira.getNome(), Session.userEmail, turno);
                         JSONManager.cadeiraUsers.add(currentCadeiraUser);
+                        turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
+                        turnoTextView.setVisibility(View.VISIBLE);
+
 
                         actionButtonDesinscrever.show();
                         actionButtonInscrever.hide();
@@ -137,6 +146,7 @@ public class CadeiraFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         JSONManager.cadeiraUsers.remove(currentCadeiraUser);
+                        turnoTextView.setVisibility(View.INVISIBLE);
 
                         actionButtonInscrever.show();
                         actionButtonDesinscrever.hide();

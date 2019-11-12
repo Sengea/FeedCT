@@ -1,5 +1,7 @@
 package com.example.feedct.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,7 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -32,8 +37,13 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TodasFragment extends Fragment {
-    TodasAdapter adapter;
-    SortedSet<Departamento> departamentos;
+    private TodasAdapter adapter;
+    private SortedSet<Departamento> departamentos;
+    private SortedSet<Departamento> departamentosBearingFilter;
+
+    private boolean sem1IsFiltered;
+    private boolean sem2IsFiltered;
+    private boolean[] departamentoIsFiltered;
 
     private String currentSearch = "";
 
@@ -58,6 +68,126 @@ public class TodasFragment extends Fragment {
 
         updateDepartamentos();
         adapter.setData(departamentos);
+        departamentosBearingFilter = departamentos;
+        departamentoIsFiltered = new boolean[departamentos.size()];
+        sem1IsFiltered = false;
+        sem2IsFiltered = false;
+
+        final ImageButton imageButtonCancelDepartamento = view.findViewById(R.id.imageButtonCancelDepartamento);
+        final ImageButton imageButtonCancelSemestre = view.findViewById(R.id.imageButtonCancelSemestre);
+        imageButtonCancelDepartamento.setVisibility(View.GONE);
+        imageButtonCancelSemestre.setVisibility(View.GONE);
+
+        final Button buttonDepartamento = view.findViewById(R.id.buttonDepartamento);
+        final Button buttonSemestre = view.findViewById(R.id.buttonSemestre);
+
+        buttonDepartamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle("Departamentos");
+
+                final List<String> items = new LinkedList<>();
+                for (Departamento departamento : departamentos)
+                    items.add(departamento.getName());
+
+                builder.setMultiChoiceItems(items.toArray(new String[0]), departamentoIsFiltered, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        departamentoIsFiltered[which] = isChecked;
+                    }
+                });
+
+                builder.setPositiveButton("Filtrar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos, buttonDepartamento, imageButtonCancelDepartamento);
+                        filteredDepartamentos = applySemestreFilter(filteredDepartamentos);
+                        departamentosBearingFilter = filteredDepartamentos;
+
+                        filteredDepartamentos = searchInDepartamentos(currentSearch);
+                        adapter.setData(filteredDepartamentos);
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
+        buttonSemestre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle("Semestre");
+
+                builder.setItems(new String[]{"1º Semestre", "2º Semestre"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String filterText;
+
+                        if (which == 0) {
+                            sem1IsFiltered = true;
+                            sem2IsFiltered = false;
+                            filterText = "1º Semestre";
+                        }
+                        else {
+                            sem1IsFiltered = false;
+                            sem2IsFiltered = true;
+                            filterText = "2º Semestre";
+                        }
+
+                        buttonSemestre.setText(filterText);
+                        imageButtonCancelSemestre.setVisibility(View.VISIBLE);
+
+                        SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos, buttonDepartamento, imageButtonCancelDepartamento);
+                        filteredDepartamentos = applySemestreFilter(filteredDepartamentos);
+                        departamentosBearingFilter = filteredDepartamentos;
+
+                        filteredDepartamentos = searchInDepartamentos(currentSearch);
+                        adapter.setData(filteredDepartamentos);
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
+        imageButtonCancelDepartamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < departamentoIsFiltered.length; i++) {
+                     departamentoIsFiltered[i] = false;
+                }
+
+                buttonDepartamento.setText(getString(R.string.departamentoFilter));
+                imageButtonCancelDepartamento.setVisibility(View.GONE);
+
+                SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos, buttonDepartamento, imageButtonCancelDepartamento);
+                filteredDepartamentos = applySemestreFilter(filteredDepartamentos);
+                departamentosBearingFilter = filteredDepartamentos;
+
+                filteredDepartamentos = searchInDepartamentos(currentSearch);
+                adapter.setData(filteredDepartamentos);
+            }
+        });
+
+        imageButtonCancelSemestre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sem1IsFiltered = false;
+                sem2IsFiltered = false;
+
+                buttonSemestre.setText(getString(R.string.semestreFilter));
+                imageButtonCancelSemestre.setVisibility(View.GONE);
+
+                SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos, buttonDepartamento, imageButtonCancelDepartamento);
+                filteredDepartamentos = applySemestreFilter(filteredDepartamentos);
+                departamentosBearingFilter = filteredDepartamentos;
+
+                filteredDepartamentos = searchInDepartamentos(currentSearch);
+                adapter.setData(filteredDepartamentos);
+            }
+        });
 
         return  view;
     }
@@ -67,11 +197,11 @@ public class TodasFragment extends Fragment {
         super.onStart();
 
         updateDepartamentos();
-        adapter.setData(filteredDepartamentos(currentSearch));
+        adapter.setData(searchInDepartamentos(currentSearch));
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.todas_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
@@ -86,10 +216,60 @@ public class TodasFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 currentSearch = newText;
-                adapter.setData(filteredDepartamentos(currentSearch));
+                adapter.setData(searchInDepartamentos(currentSearch));
                 return false;
             }
         });
+    }
+
+    private SortedSet<Departamento> applyDepartamentoFilter(SortedSet<Departamento> departamentos, Button buttonDepartamento, ImageButton imageButtonCancelDepartamentos) {
+        StringBuilder filterText = new StringBuilder();
+        SortedSet<Departamento> filteredDepartamentos = new TreeSet<>();
+        int i = 0;
+        for (Departamento departamento : departamentos) {
+            if (departamentoIsFiltered[i++]) {
+                filteredDepartamentos.add(departamento);
+                filterText.append(" ").append(departamento.getName());
+            }
+        }
+
+        if (filteredDepartamentos.isEmpty()) {
+            filteredDepartamentos = departamentos;
+            departamentosBearingFilter = departamentos;
+            filterText = new StringBuilder(getString(R.string.departamentoFilter));
+            imageButtonCancelDepartamentos.setVisibility(View.GONE);
+        }
+        else {
+            departamentosBearingFilter = filteredDepartamentos;
+            filterText = new StringBuilder(filterText.toString().trim().replace(" ", ", "));
+            imageButtonCancelDepartamentos.setVisibility(View.VISIBLE);
+        }
+
+        buttonDepartamento.setText(filterText.toString());
+
+        return filteredDepartamentos;
+    }
+
+    private SortedSet<Departamento> applySemestreFilter(SortedSet<Departamento> departamentos) {
+        SortedSet<Departamento> filteredDepartamentos = new TreeSet<>();
+
+        for (Departamento departamento : departamentos) {
+            if(sem1IsFiltered) {
+                if (departamento.getCadeirasBySemSize(1) > 0) {
+                    filteredDepartamentos.add(new Departamento(departamento.getName(), departamento.getCadeirasBySem(1), new LinkedList<Cadeira>()));
+                }
+            }
+            else if (sem2IsFiltered) {
+                if (departamento.getCadeirasBySemSize(2) > 0) {
+                    filteredDepartamentos.add(new Departamento(departamento.getName(), new LinkedList<Cadeira>(), departamento.getCadeirasBySem(2)));
+                }
+            }
+            else {
+                filteredDepartamentos.add(departamento);
+            }
+        }
+
+        return filteredDepartamentos;
     }
 
     private void updateDepartamentos() {
@@ -125,13 +305,15 @@ public class TodasFragment extends Fragment {
         }
     }
 
-    private SortedSet<Departamento> filteredDepartamentos(String search) {
-        SortedSet<Departamento> filtered_departamentos = new TreeSet<>();
+    private SortedSet<Departamento> searchInDepartamentos(String search) {
+        SortedSet<Departamento> departamentosBearingSearch = new TreeSet<>();
 
-        for(Departamento departamento : departamentos) {
+        for(Departamento departamento : departamentosBearingFilter) {
+            // Pesquisa coincide com o nome de um departamento
             if (departamento.getName().toLowerCase().startsWith(search.toLowerCase()))
-                filtered_departamentos.add(departamento);
+                departamentosBearingSearch.add(departamento);
             else {
+                // Obtem as cadeiras deste departamento em que a pesquisa coincide ou com a sigla ou com o nome
                 Departamento tmp = new Departamento(departamento.getName());
                 for (int semestre = 1; semestre <= 2; semestre++) {
                     for (Cadeira cadeira : departamento.getCadeirasBySem(semestre)) {
@@ -140,11 +322,12 @@ public class TodasFragment extends Fragment {
                     }
                 }
 
+                // Adiciona este departamento se alguma cadeira deste departamento coincidiu com a pesquisa
                 if (tmp.getCadeirasBySemSize(1) + tmp.getCadeirasBySemSize(2) != 0)
-                    filtered_departamentos.add(tmp);
+                    departamentosBearingSearch.add(tmp);
             }
         }
 
-        return filtered_departamentos;
+        return departamentosBearingSearch;
     }
 }

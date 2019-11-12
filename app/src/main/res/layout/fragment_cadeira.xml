@@ -138,4 +138,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_delete" />
 
+    <TextView
+        android:id="@+id/textViewTurno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="Inscrito no turno 2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/actionButtonDesinscrever"
+        app:layout_constraintEnd_toStartOf="@+id/actionButtonDesinscrever"
+        app:layout_constraintTop_toTopOf="@+id/actionButtonDesinscrever" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,50 +1,62 @@
 [
   {
     "nomeCadeira": "Análise Matemática I",
-    "emailUser" : "af.moura@campus.fct.unl.pt"
+    "emailUser" : "af.moura@campus.fct.unl.pt",
+    "turno" : "1"
   },
   {
     "nomeCadeira": "Álgebra Linear e Geometria Analítica",
-    "emailUser" : "af.moura@campus.fct.unl.pt"
+    "emailUser" : "af.moura@campus.fct.unl.pt",
+    "turno" : "2"
   },
   {
     "nomeCadeira": "Introdução à Programação",
-    "emailUser" : "af.moura@campus.fct.unl.pt"
+    "emailUser" : "af.moura@campus.fct.unl.pt",
+    "turno" : "3"
   },
   {
     "nomeCadeira": "Sistemas Lógicos",
-    "emailUser" : "af.moura@campus.fct.unl.pt"
+    "emailUser" : "af.moura@campus.fct.unl.pt",
+    "turno" : "4"
   },
   {
     "nomeCadeira": "Análise Matemática I",
-    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+    "emailUser" : "c.rosalino@campus.fct.unl.pt",
+    "turno" : "1"
   },
   {
     "nomeCadeira": "Álgebra Linear e Geometria Analítica",
-    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+    "emailUser" : "c.rosalino@campus.fct.unl.pt",
+    "turno" : "2"
   },
   {
     "nomeCadeira": "Introdução à Programação",
-    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+    "emailUser" : "c.rosalino@campus.fct.unl.pt",
+    "turno" : "3"
   },
   {
     "nomeCadeira": "Sistemas Lógicos",
-    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+    "emailUser" : "c.rosalino@campus.fct.unl.pt",
+    "turno" : "4"
   },
   {
     "nomeCadeira": "Análise Matemática I",
-    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+    "emailUser" : "mf.andrade@campus.fct.unl.pt",
+    "turno" : "1"
   },
   {
     "nomeCadeira": "Álgebra Linear e Geometria Analítica",
-    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+    "emailUser" : "mf.andrade@campus.fct.unl.pt",
+    "turno" : "2"
   },
   {
     "nomeCadeira": "Introdução à Programação",
-    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+    "emailUser" : "mf.andrade@campus.fct.unl.pt",
+    "turno" : "3"
   },
   {
     "nomeCadeira": "Sistemas Lógicos",
-    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+    "emailUser" : "mf.andrade@campus.fct.unl.pt",
+    "turno" : "4"
   }
 ]

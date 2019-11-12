@@ -18,6 +18,12 @@ public class Departamento implements Comparable<Departamento> {
         cadeiras_sem2 = new LinkedList<>();
     }
 
+    public Departamento(String name, List<Cadeira> cadeiras_sem1, List<Cadeira> cadeiras_sem2) {
+        this.name = name;
+        this.cadeiras_sem1 = cadeiras_sem1;
+        this.cadeiras_sem2 = cadeiras_sem2;
+    }
+
     public String getName() { return name; }
 
     public void addCadeira(Cadeira cadeira) {

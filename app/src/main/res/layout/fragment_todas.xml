@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/buttonDepartamento"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/departamentoFilter"
+        app:icon="@drawable/ic_funnel"
+        app:iconSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonCancelDepartamento"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSemestre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/todasRecyclerView"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/semestreFilter"
+        app:icon="@drawable/ic_funnel"
+        app:iconSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonCancelSemestre"
+        app:layout_constraintStart_toEndOf="@+id/view3"
+        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todasRecyclerView"
@@ -11,8 +49,56 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp" />
-</RelativeLayout>
+        android:background="#02552552"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/todasRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#C3C3C3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/todasRecyclerView" />
+
+    <ImageButton
+        android:id="@+id/imageButtonCancelDepartamento"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="1dp"
+        android:backgroundTint="#FFFFFF"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toStartOf="@+id/view3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageButton
+        android:id="@+id/imageButtonCancelSemestre"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="2dp"
+        android:backgroundTint="#FFFFFF"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
