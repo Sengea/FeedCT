@@ -1,4 +1,4 @@
-package com.example.feedct;
+package com.example.feedct.adapters;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

@@ -3,4 +3,17 @@
     <string name="action_settings">Settings</string>
     <string name="action_search">Pesquisar</string>
     <string name="todas_section_format">%s %dº SEM</string>
+    <string name="title_activity_login">Login</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirmar Password</string>
+    <string name="prompt_name">Primeiro e Último Nome</string>
+    <string name="prompt_numero">Numero de Aluno</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_register">Criar Conta</string>
+    <string name="email_sufix">\@campus.fct.unl.pt</string>
+    <string name="welcome">"Bem Vindo !"</string>
+    <string name="invalid_username">Email inválido</string>
+    <string name="invalid_password">Password inválida</string>
+    <string name="login_failed">"Login falhou"</string>
 </resources>

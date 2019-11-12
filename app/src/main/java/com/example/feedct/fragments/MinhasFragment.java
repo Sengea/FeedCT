@@ -1,18 +1,17 @@
-package com.example.feedct;
+package com.example.feedct.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.feedct.JSONManager;
+import com.example.feedct.R;
+import com.example.feedct.Session;
 import com.example.feedct.adapters.MinhasAdapter;
 import com.example.feedct.jsonpojos.Cadeira;
 import com.example.feedct.jsonpojos.CadeiraUser;
@@ -21,9 +20,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Minhas extends Fragment {
-    private String userEmail = "af.moura@campus.fct.unl.pt";
-
+public class MinhasFragment extends Fragment {
     private List<Cadeira> cadeiras;
     private MinhasAdapter adapter;
 
@@ -32,7 +29,7 @@ public class Minhas extends Fragment {
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.activity_minhas, container, false);
+        View view = inflater.inflate(R.layout.fragment_minhas, container, false);
 
         ListView listView = view.findViewById(R.id.minhasListView);
 
@@ -57,7 +54,7 @@ public class Minhas extends Fragment {
     private void updateCadeiras() {
         List<String> minhasNames = new LinkedList<>();
         for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
-            if (cadeiraUser.getEmailUser().equals(userEmail))
+            if (cadeiraUser.getEmailUser().equals(Session.userEmail))
                 minhasNames.add(cadeiraUser.getNomeCadeira());
         }
 

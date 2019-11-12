@@ -1,4 +1,4 @@
-package com.example.feedct;
+package com.example.feedct.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.feedct.Departamento;
+import com.example.feedct.JSONManager;
+import com.example.feedct.R;
+import com.example.feedct.Session;
 import com.example.feedct.adapters.TodasAdapter;
 import com.example.feedct.cadeiracomparators.CadeiraNameComparator;
 import com.example.feedct.jsonpojos.Cadeira;
@@ -27,9 +31,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class Todas extends Fragment {
-    private String userEmail = "af.moura@campus.fct.unl.pt";
-
+public class TodasFragment extends Fragment {
     TodasAdapter adapter;
     SortedSet<Departamento> departamentos;
 
@@ -39,7 +41,7 @@ public class Todas extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.activity_todas, container, false);
+        View view = inflater.inflate(R.layout.fragment_todas, container, false);
 
         //Setup recycler view
         RecyclerView recyclerView = view.findViewById(R.id.todasRecyclerView);
@@ -93,7 +95,7 @@ public class Todas extends Fragment {
     private void updateDepartamentos() {
         List<String> minhasNames = new LinkedList<>();
         for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
-            if (cadeiraUser.getEmailUser().equals(userEmail))
+            if (cadeiraUser.getEmailUser().equals(Session.userEmail))
                 minhasNames.add(cadeiraUser.getNomeCadeira());
         }
 

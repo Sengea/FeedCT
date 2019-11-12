@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.feedct.CadeiraActivity;
+import com.example.feedct.activities.CadeiraActivity;
 import com.example.feedct.jsonpojos.Cadeira;
 import com.example.feedct.Departamento;
 import com.example.feedct.R;
@@ -75,26 +75,26 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v;
         RecyclerView.ViewHolder itemViewHolder;
 
         if (viewType == SECTION) {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_layout, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_layout, parent, false);
             itemViewHolder = new MySection(v);
         }
         else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, parent, false);
             itemViewHolder = new MyElement(v);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CadeiraActivity.class);
+                    intent.putExtra("Cadeira", ((TextView)v.findViewById(R.id.nome)).getText());
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, CadeiraActivity.class);
-                intent.putExtra("Cadeira", ((TextView)v.findViewById(R.id.nome)).getText());
-                mContext.startActivity(intent);
-            }
-        });
+
 
         return itemViewHolder;
     }

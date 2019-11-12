@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.feedct.CadeiraActivity;
+import com.example.feedct.activities.CadeiraActivity;
 import com.example.feedct.jsonpojos.Cadeira;
 import com.example.feedct.R;
 

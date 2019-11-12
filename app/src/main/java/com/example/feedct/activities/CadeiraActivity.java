@@ -1,32 +1,36 @@
-package com.example.feedct;
+package com.example.feedct.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 
-import com.google.android.material.tabs.TabLayout;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.View;
+import com.example.feedct.JSONManager;
+import com.example.feedct.R;
+import com.example.feedct.adapters.SectionsPageAdapter;
+import com.example.feedct.fragments.CadeiraFragment;
+import com.example.feedct.jsonpojos.Cadeira;
+import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity {
-
-    private SectionsPageAdapter mSectionsPageAdapter;
+public class CadeiraActivity extends AppCompatActivity {
     private ViewPager mViewPager;
+    private Cadeira cadeira;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Minhas");
+        cadeira = JSONManager.cadeiraByName.get(getIntent().getStringExtra("Cadeira"));
+        setContentView(R.layout.tabs_and_content);
 
-        mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
-        View contentView = findViewById(R.id.content_main);
-        mViewPager = (ViewPager) contentView.findViewById(R.id.container);
+        getSupportActionBar().setTitle(cadeira.getSigla());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -48,18 +52,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        new JSONManager(getResources());
-        new Session("af.moura@campus.fct.unl.pt");
     }
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Minhas(), "Minhas");
-        adapter.addFragment(new Todas(), "Todas");
-        adapter.addFragment(new Notificacoes(), "Notificações");
+        adapter.addFragment(new CadeiraFragment(cadeira), "Cadeira");
         viewPager.setAdapter(adapter);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 }

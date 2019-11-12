@@ -1,4 +1,4 @@
-package com.example.feedct;
+package com.example.feedct.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class Notificacoes extends Fragment {
+import com.example.feedct.R;
+
+public class NotificacoesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_notificacoes, container, false);
+        View view = inflater.inflate(R.layout.fragment_notificacoes, container, false);
 
         return  view;
     }
