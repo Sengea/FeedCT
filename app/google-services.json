@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "850461879187",
+    "firebase_url": "https://feedctdb.firebaseio.com",
+    "project_id": "feedctdb",
+    "storage_bucket": "feedctdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850461879187:android:80eaf395f0c76f608d9666",
+        "android_client_info": {
+          "package_name": "com.example.feedct"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850461879187-2p7jhvd8v7u7fu7pk4so5opr1386auk4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.feedct",
+            "certificate_hash": "175ebe1f963430150ae4bb9456a9a736f695a95a"
+          }
+        },
+        {
+          "client_id": "850461879187-vvu4n76bd0fmsftds305cihvlasagg30.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX8_-Tx0-CHaJyVAu8_uYMCeuzczHoCGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850461879187-vvu4n76bd0fmsftds305cihvlasagg30.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

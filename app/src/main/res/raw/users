@@ -1,0 +1,20 @@
+[
+  {
+    "email" : "af.moura@campus.fct.unl.pt",
+    "password" : "50739",
+    "nome" : "André Moura",
+    "numero" : 50739
+  },
+  {
+    "email" : "c.rosalino@campus.fct.unl.pt",
+    "password" : "48175",
+    "nome" : "Cláudia Rosalino",
+    "numero" : 48175
+  },
+  {
+    "email" : "mf.andrade@campus.fct.unl.pt",
+    "password" : "47131",
+    "nome" : "Miguel Andrade",
+    "numero" : 47131
+  }
+]

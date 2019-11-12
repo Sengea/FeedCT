@@ -1,5 +1,7 @@
 package com.example.feedct.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.feedct.Cadeira;
+import com.example.feedct.CadeiraActivity;
+import com.example.feedct.jsonpojos.Cadeira;
 import com.example.feedct.Departamento;
 import com.example.feedct.R;
 
@@ -22,13 +25,16 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int SECTION = 0;
     private static final int ELEMENT = 1;
 
+    private Context mContext;
+
     private HashMap<Integer, Integer> typeByRow;
     private HashMap<Integer, Departamento> departamentoByRow;
     private HashMap<Integer, Cadeira> cadeiraByRow;
 
     private SortedSet<Departamento> current_departamentos;
 
-    public TodasAdapter() {
+    public TodasAdapter(Context context) {
+        mContext = context;
         current_departamentos = new TreeSet<>();
         typeByRow = new HashMap<>();
         departamentoByRow = new HashMap<>();
@@ -36,6 +42,9 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void setData(SortedSet<Departamento> data) {
+        if (data == null)
+            return;
+
         current_departamentos.clear();
         current_departamentos.addAll(data);
 
@@ -66,16 +75,26 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v;
         RecyclerView.ViewHolder itemViewHolder;
 
         if (viewType == SECTION) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_layout, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_layout, parent, false);
             itemViewHolder = new MySection(v);
         }
         else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, parent, false);
             itemViewHolder = new MyElement(v);
         }
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, CadeiraActivity.class);
+                intent.putExtra("Cadeira", ((TextView)v.findViewById(R.id.nome)).getText());
+                mContext.startActivity(intent);
+            }
+        });
 
         return itemViewHolder;
     }
@@ -125,9 +144,9 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         public void setup(Cadeira cadeira) {
-            siglaTextView.setText(cadeira.getSiglaText());
-            nomeTextView.setText(cadeira.getNomeText());
-            departamentoTextView.setText(cadeira.getDepartamentoText());
+            siglaTextView.setText(cadeira.getSigla());
+            nomeTextView.setText(cadeira.getNome());
+            departamentoTextView.setText(cadeira.getDepartamento());
             semestreTextView.setText(cadeira.getSemestreText());
             creditosTextView.setText(cadeira.getCreditosText());
             ratingBar.setRating(cadeira.getRating());

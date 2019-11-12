@@ -1,0 +1,50 @@
+[
+  {
+    "nomeCadeira": "Análise Matemática I",
+    "emailUser" : "af.moura@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Álgebra Linear e Geometria Analítica",
+    "emailUser" : "af.moura@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Introdução à Programação",
+    "emailUser" : "af.moura@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Sistemas Lógicos",
+    "emailUser" : "af.moura@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Análise Matemática I",
+    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Álgebra Linear e Geometria Analítica",
+    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Introdução à Programação",
+    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Sistemas Lógicos",
+    "emailUser" : "c.rosalino@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Análise Matemática I",
+    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Álgebra Linear e Geometria Analítica",
+    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Introdução à Programação",
+    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+  },
+  {
+    "nomeCadeira": "Sistemas Lógicos",
+    "emailUser" : "mf.andrade@campus.fct.unl.pt"
+  }
+]

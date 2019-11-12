@@ -1,7 +1,6 @@
-package com.example.feedct;
+package com.example.feedct.jsonpojos;
 
 public class Cadeira implements Comparable<Cadeira> {
-    private boolean inscrito;
     private String sigla;
     private String nome;
     private String departamento;
@@ -9,8 +8,7 @@ public class Cadeira implements Comparable<Cadeira> {
     private int creditos;
     private float rating;
 
-    public Cadeira(boolean inscrito, String sigla, String nome, String departamento, int semestre, int creditos, float rating) {
-        this.inscrito = inscrito;
+    public Cadeira(String sigla, String nome, String departamento, int semestre, int creditos, float rating) {
         this.sigla = sigla;
         this.nome = nome;
         this.departamento = departamento;
@@ -19,26 +17,16 @@ public class Cadeira implements Comparable<Cadeira> {
         this.rating = rating;
     }
 
-    public boolean isInscrito() { return inscrito; }
-
-    public String getSiglaText() {
+    public String getSigla() {
         return sigla;
     }
 
-    public String getNomeText() {
+    public String getNome() {
         return nome;
     }
 
-    public String getDepartamentoText() {
+    public String getDepartamento() {
         return departamento;
-    }
-
-    public String getSemestreText() {
-        return String.valueOf(semestre) + "º SEM";
-    }
-
-    public String getCreditosText() {
-        return String.valueOf(creditos) + " ECTS";
     }
 
     public int getSemestre() { return semestre; }
@@ -49,8 +37,16 @@ public class Cadeira implements Comparable<Cadeira> {
         return rating;
     }
 
+    public String getSemestreText() {
+        return String.valueOf(semestre) + "º SEM";
+    }
+
+    public String getCreditosText() {
+        return String.valueOf(creditos) + " ECTS";
+    }
+
     @Override
     public int compareTo(Cadeira other) {
-        return nome.compareTo(other.getNomeText());
+        return nome.compareTo(other.getNome());
     }
 }

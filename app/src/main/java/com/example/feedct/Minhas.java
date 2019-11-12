@@ -14,16 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.feedct.adapters.MinhasAdapter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.example.feedct.jsonpojos.Cadeira;
+import com.example.feedct.jsonpojos.CadeiraUser;
 
-import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Minhas extends Fragment {
+    private String userEmail = "af.moura@campus.fct.unl.pt";
 
     private List<Cadeira> cadeiras;
     private MinhasAdapter adapter;
@@ -35,62 +34,39 @@ public class Minhas extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_minhas, container, false);
 
-        InputStream inputStream = getResources().openRawResource(R.raw.cadeiras);
-        String cadeiras_json = null;
-
-        try {
-            byte[] b = new byte[inputStream.available()];
-            inputStream.read(b);
-            cadeiras_json = new String(b);
-        }
-        catch (Exception e) { }
-
-        Type collectionType = new TypeToken<List<Cadeira>>(){}.getType();
-        List<Cadeira> allCadeiras = new Gson().fromJson(cadeiras_json, collectionType);
-
-        cadeiras = new LinkedList<>();
-        for (Cadeira cadeira : allCadeiras) {
-            if (cadeira.isInscrito())
-                cadeiras.add(cadeira);
-        }
-
-        Collections.sort(cadeiras);
-
         ListView listView = view.findViewById(R.id.minhasListView);
 
-        adapter = new MinhasAdapter();
-        adapter.setData(cadeiras);
+        adapter = new MinhasAdapter(getContext());
         listView.setAdapter(adapter);
+
+        updateCadeiras();
+        adapter.setData(cadeiras);
+
 
         return  view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.todas_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
+    public void onStart() {
+        super.onStart();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        updateCadeiras();
+        adapter.setData(cadeiras);
+    }
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+    private void updateCadeiras() {
+        List<String> minhasNames = new LinkedList<>();
+        for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
+            if (cadeiraUser.getEmailUser().equals(userEmail))
+                minhasNames.add(cadeiraUser.getNomeCadeira());
+        }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                List<Cadeira> filtered_cadeiras = new LinkedList<>();
+        cadeiras = new LinkedList<>();
+        for (Cadeira cadeira : JSONManager.cadeiras) {
+            if (minhasNames.contains(cadeira.getNome()))
+                cadeiras.add(cadeira);
+        }
 
-                for(Cadeira cadeira : cadeiras) {
-                    if (cadeira.getSiglaText().toLowerCase().startsWith(newText.toLowerCase()) || cadeira.getNomeText().toLowerCase().startsWith(newText.toLowerCase()))
-                        filtered_cadeiras.add(cadeira);
-                }
-
-                adapter.setData(filtered_cadeiras);
-
-                return false;
-            }
-        });
+        Collections.sort(cadeiras);
     }
 }

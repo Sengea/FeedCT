@@ -1,0 +1,26 @@
+[
+  {
+    "cadeira" : "Análise Matemática I",
+    "professor": "Professor 1",
+    "dia" : "3ª",
+    "horaInicio" : "10h",
+    "horaFim" : "11h",
+    "sala" : "Gab 110"
+  },
+  {
+    "cadeira" : "Análise Matemática I",
+    "professor": "Professor 2",
+    "dia" : "4ª",
+    "horaInicio" : "15h",
+    "horaFim" : "16h",
+    "sala" : "Gab 112"
+  },
+  {
+    "cadeira" : "Análise Matemática I",
+    "professor": "Professor 3",
+    "dia" : "5ª",
+    "horaInicio" : "19h",
+    "horaFim" : "10h",
+    "sala" : "Gab 114"
+  }
+]

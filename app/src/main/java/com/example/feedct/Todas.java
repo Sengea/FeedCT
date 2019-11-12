@@ -1,6 +1,5 @@
 package com.example.feedct;
 
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -19,11 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.feedct.adapters.TodasAdapter;
 import com.example.feedct.cadeiracomparators.CadeiraNameComparator;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.example.feedct.jsonpojos.Cadeira;
+import com.example.feedct.jsonpojos.CadeiraUser;
 
-import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,9 +28,12 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Todas extends Fragment {
-    SortedSet<Departamento> departamentos;
+    private String userEmail = "af.moura@campus.fct.unl.pt";
 
     TodasAdapter adapter;
+    SortedSet<Departamento> departamentos;
+
+    private String currentSearch = "";
 
     @Nullable
     @Override
@@ -42,46 +41,8 @@ public class Todas extends Fragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.activity_todas, container, false);
 
-        InputStream inputStream = getResources().openRawResource(R.raw.cadeiras);
-        String cadeiras_json = null;
-
-        try {
-            byte[] b = new byte[inputStream.available()];
-            inputStream.read(b);
-            cadeiras_json = new String(b);
-        }
-        catch (Exception e) { }
-
-        Type collectionType = new TypeToken<List<Cadeira>>(){}.getType();
-        List<Cadeira> cadeiras_list = new Gson().fromJson(cadeiras_json, collectionType);
-
-        HashMap<String, Departamento> departamentoByName = new HashMap<>();
-        departamentos = new TreeSet<>();
-
-        for (Cadeira cadeira : cadeiras_list) {
-            if(!cadeira.isInscrito()) {
-                String nomeDepartamento = cadeira.getDepartamentoText();
-
-                Departamento departamento = departamentoByName.get(nomeDepartamento);
-                if (departamento == null) {
-                    departamento = new Departamento(nomeDepartamento);
-                    departamentos.add(departamento);
-
-                    departamentoByName.put(nomeDepartamento, departamento);
-                }
-
-                departamento.addCadeira(cadeira);
-            }
-        }
-
-        // PAra cada derpatamente ordenar por nome
-        Comparator<Cadeira> comparator = new CadeiraNameComparator();
-        for (Departamento departamento : departamentos) {
-            departamento.sortCadeiras(comparator);
-        }
-
+        //Setup recycler view
         RecyclerView recyclerView = view.findViewById(R.id.todasRecyclerView);
-        //recyclerView.setHasFixedSize(false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -90,11 +51,21 @@ public class Todas extends Fragment {
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        adapter = new TodasAdapter();
-        adapter.setData(departamentos);
+        adapter = new TodasAdapter(view.getContext());
         recyclerView.setAdapter(adapter);
 
+        updateDepartamentos();
+        adapter.setData(departamentos);
+
         return  view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateDepartamentos();
+        adapter.setData(filteredDepartamentos(currentSearch));
     }
 
     @Override
@@ -112,29 +83,66 @@ public class Todas extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                SortedSet<Departamento> filtered_departamento = new TreeSet<>();
-
-                for(Departamento departamento : departamentos) {
-                    if (departamento.getName().toLowerCase().startsWith(newText.toLowerCase()))
-                        filtered_departamento.add(departamento);
-                    else {
-                        Departamento tmp = new Departamento(departamento.getName());
-                        for (int semestre = 1; semestre <= 2; semestre++) {
-                            for (Cadeira cadeira : departamento.getCadeirasBySem(semestre)) {
-                                if (cadeira.getSiglaText().toLowerCase().startsWith(newText.toLowerCase()) || cadeira.getNomeText().toLowerCase().startsWith(newText.toLowerCase()))
-                                    tmp.addCadeira(cadeira);
-                            }
-                        }
-
-                        if (tmp.getCadeirasBySemSize(1) + tmp.getCadeirasBySemSize(2) != 0)
-                            filtered_departamento.add(tmp);
-                    }
-                }
-
-                adapter.setData(filtered_departamento);
-
+                currentSearch = newText;
+                adapter.setData(filteredDepartamentos(currentSearch));
                 return false;
             }
         });
+    }
+
+    private void updateDepartamentos() {
+        List<String> minhasNames = new LinkedList<>();
+        for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
+            if (cadeiraUser.getEmailUser().equals(userEmail))
+                minhasNames.add(cadeiraUser.getNomeCadeira());
+        }
+
+        HashMap<String, Departamento> departamentoByName = new HashMap<>();
+        departamentos = new TreeSet<>();
+
+        for (Cadeira cadeira : JSONManager.cadeiras) {
+            if(!minhasNames.contains(cadeira.getNome())) {
+                String nomeDepartamento = cadeira.getDepartamento();
+
+                Departamento departamento = departamentoByName.get(nomeDepartamento);
+                if (departamento == null) {
+                    departamento = new Departamento(nomeDepartamento);
+                    departamentos.add(departamento);
+
+                    departamentoByName.put(nomeDepartamento, departamento);
+                }
+
+                departamento.addCadeira(cadeira);
+            }
+        }
+
+        // Para cada derpatamente ordenar por nome
+        Comparator<Cadeira> comparator = new CadeiraNameComparator();
+        for (Departamento departamento : departamentos) {
+            departamento.sortCadeiras(comparator);
+        }
+    }
+
+    private SortedSet<Departamento> filteredDepartamentos(String search) {
+        SortedSet<Departamento> filtered_departamentos = new TreeSet<>();
+
+        for(Departamento departamento : departamentos) {
+            if (departamento.getName().toLowerCase().startsWith(search.toLowerCase()))
+                filtered_departamentos.add(departamento);
+            else {
+                Departamento tmp = new Departamento(departamento.getName());
+                for (int semestre = 1; semestre <= 2; semestre++) {
+                    for (Cadeira cadeira : departamento.getCadeirasBySem(semestre)) {
+                        if (cadeira.getSigla().toLowerCase().startsWith(search.toLowerCase()) || cadeira.getNome().toLowerCase().startsWith(search.toLowerCase()))
+                            tmp.addCadeira(cadeira);
+                    }
+                }
+
+                if (tmp.getCadeirasBySemSize(1) + tmp.getCadeirasBySemSize(2) != 0)
+                    filtered_departamentos.add(tmp);
+            }
+        }
+
+        return filtered_departamentos;
     }
 }

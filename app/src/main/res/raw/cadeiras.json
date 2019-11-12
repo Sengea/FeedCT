@@ -1,6 +1,6 @@
 ﻿[
     {
-      "inscrito": true,
+
       "sigla": "AM1",
       "nome": "Análise Matemática I",
       "departamento": "DM",
@@ -9,7 +9,7 @@
       "rating": 0.7
     },
     {
-      "inscrito": true,
+
       "sigla": "ALGA",
       "nome": "Álgebra Linear e Geometria Analítica",
       "departamento": "DM",
@@ -18,7 +18,7 @@
       "rating": 4.1
     },
     {
-      "inscrito": true,
+
       "sigla": "IP",
       "nome": "Introdução à Programação",
       "departamento": "DI",
@@ -27,7 +27,7 @@
       "rating": 0.8
     },
     {
-      "inscrito": true,
+
       "sigla": "SL",
       "nome": "Sistemas Lógicos",
       "departamento": "DEE",
@@ -36,7 +36,7 @@
       "rating": 3.8
     },
     {
-      "inscrito": false,
+
       "sigla": "AM2E",
       "nome": "Análise Matemática II E",
       "departamento": "DM",
@@ -45,7 +45,7 @@
       "rating": 0.3
     },
     {
-      "inscrito": false,
+
       "sigla": "AC",
       "nome": "Arquitetura de Computadores",
       "departamento": "DI",
@@ -54,7 +54,7 @@
       "rating": 0.4
     },
     {
-      "inscrito": false,
+
       "sigla": "MD",
       "nome": "Matemática Discreta",
       "departamento": "DM",
@@ -63,7 +63,7 @@
       "rating": 4.9
     },
     {
-      "inscrito": false,
+
       "sigla": "POO",
       "nome": "Programação Orientada pelos Objetos",
       "departamento": "DI",
@@ -72,7 +72,7 @@
       "rating": 4
     },
     {
-      "inscrito": false,
+
       "sigla": "AED",
       "nome": "Algoritmos e Estruturas de Dados",
       "departamento": "DI",
@@ -81,7 +81,7 @@
       "rating": 2
     },
     {
-      "inscrito": false,
+
       "sigla": "F",
       "nome": "Física",
       "departamento": "DF",
@@ -90,7 +90,7 @@
       "rating": 5
     },
     {
-      "inscrito": false,
+
       "sigla": "FSO",
       "nome": "Fundamentos de Sistemas de Operação",
       "departamento": "DI",
@@ -99,7 +99,7 @@
       "rating": 3.8
     },
     {
-      "inscrito": false,
+
       "sigla": "LC",
       "nome": "Lógica Computacional",
       "departamento": "DI",
@@ -108,7 +108,7 @@
       "rating": 4.9
     },
     {
-      "inscrito": false,
+
       "sigla": "BD",
       "nome": "Bases de Dados",
       "departamento": "DI",
@@ -117,7 +117,7 @@
       "rating": 0.9
     },
     {
-      "inscrito": false,
+
       "sigla": "LAP",
       "nome": "Linguagens e Ambientes de Programação",
       "departamento": "DI",
@@ -126,7 +126,7 @@
       "rating": 4.8
     },
     {
-      "inscrito": false,
+
       "sigla": "PEE",
       "nome": "Probabilidades e Estatística E",
       "departamento": "DM",
@@ -135,7 +135,7 @@
       "rating": 0.7
     },
     {
-      "inscrito": false,
+
       "sigla": "TC",
       "nome": "Teoria da Computação",
       "departamento": "DI",
@@ -144,7 +144,7 @@
       "rating": 4.9
     },
     {
-      "inscrito": false,
+
       "sigla": "CGI",
       "nome": "Computação Gráfica e Interfaces",
       "departamento": "DI",
@@ -153,7 +153,7 @@
       "rating": 2.8
     },
     {
-      "inscrito": false,
+
       "sigla": "IA",
       "nome": "Inteligência Artificial",
       "departamento": "DI",
@@ -162,7 +162,7 @@
       "rating": 3.7
     },
     {
-      "inscrito": false,
+
       "sigla": "MDS",
       "nome": "Métodos de Desenvolvimento de Software",
       "departamento": "DI",
@@ -171,7 +171,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "RC",
       "nome": "Redes de Computadores",
       "departamento": "DI",
@@ -180,7 +180,7 @@
       "rating": 0.9
     },
     {
-      "inscrito": false,
+
       "sigla": "ADA",
       "nome": "Análise e Desenho de Algoritmos",
       "departamento": "DI",
@@ -189,7 +189,7 @@
       "rating": 1.9
     },
     {
-      "inscrito": false,
+
       "sigla": "SD",
       "nome": "Sistemas Distribuídos",
       "departamento": "DI",
@@ -198,7 +198,7 @@
       "rating": 0.9
     },
     {
-      "inscrito": false,
+
       "sigla": "ATA",
       "nome": "Abastecimento e Tratamento de Águas",
       "departamento": "DCEA",
@@ -207,7 +207,7 @@
       "rating": 4.2
     },
     {
-      "inscrito": false,
+
       "sigla": "ABS",
       "nome": "Ambiente e Desenvolvimento Sustentável",
       "departamento": "DCEA",
@@ -216,7 +216,7 @@
       "rating": 0.4
     },
     {
-      "inscrito": false,
+
       "sigla": "GRH",
       "nome": "Gestão de Recursos Hídricos",
       "departamento": "DCEA",
@@ -225,7 +225,7 @@
       "rating": 2.2
     },
     {
-      "inscrito": false,
+
       "sigla": "GR",
       "nome": "Gestão de Resíduos",
       "departamento": "DCEA",
@@ -234,7 +234,7 @@
       "rating": 1.6
     },
     {
-      "inscrito": false,
+
       "sigla": "GAO",
       "nome": "Gestão do Ambiente nas Organizações",
       "departamento": "DCEA",
@@ -243,7 +243,7 @@
       "rating": 3.8
     },
     {
-      "inscrito": false,
+
       "sigla": "BA",
       "nome": "Bioquímica Ambiental",
       "departamento": "DQ",
@@ -252,7 +252,7 @@
       "rating": 2
     },
     {
-      "inscrito": false,
+
       "sigla": "BGC",
       "nome": "Bioquímica Geral C",
       "departamento": "DQ",
@@ -261,7 +261,7 @@
       "rating": 4.3
     },
     {
-      "inscrito": false,
+
       "sigla": "EB1",
       "nome": "Engenharia Bioquímica I",
       "departamento": "DQ",
@@ -270,7 +270,7 @@
       "rating": 4.3
     },
     {
-      "inscrito": false,
+
       "sigla": "E",
       "nome": "Enzimologia",
       "departamento": "DQ",
@@ -279,7 +279,7 @@
       "rating": 2.7
     },
     {
-      "inscrito": false,
+
       "sigla": "F",
       "nome": "Fotoquímica",
       "departamento": "DQ",
@@ -288,7 +288,7 @@
       "rating": 3.9
     },
     {
-      "inscrito": false,
+
       "sigla": "IQB",
       "nome": "Indústrias Químicas e Biológicas",
       "departamento": "DQ",
@@ -297,7 +297,7 @@
       "rating": 3.6
     },
     {
-      "inscrito": false,
+
       "sigla": "Q",
       "nome": "Quimio-informática",
       "departamento": "DQ",
@@ -306,7 +306,7 @@
       "rating": 1.7
     },
     {
-      "inscrito": false,
+
       "sigla": "QB",
       "nome": "Química B",
       "departamento": "DQ",
@@ -315,7 +315,7 @@
       "rating": 4.5
     },
     {
-      "inscrito": false,
+
       "sigla": "QF",
       "nome": "Química Forense",
       "departamento": "DQ",
@@ -324,7 +324,7 @@
       "rating": 1
     },
     {
-      "inscrito": false,
+
       "sigla": "QI",
       "nome": "Química Inorgânica (CR)",
       "departamento": "DQ",
@@ -333,7 +333,7 @@
       "rating": 0.6
     },
     {
-      "inscrito": false,
+
       "sigla": "QOGB",
       "nome": "Química Orgânica Geral B",
       "departamento": "DQ",
@@ -342,7 +342,7 @@
       "rating": 4.7
     },
     {
-      "inscrito": false,
+
       "sigla": "TPQ",
       "nome": "Tecnologias e Processos Químicos",
       "departamento": "DQ",
@@ -351,7 +351,7 @@
       "rating": 3.2
     },
     {
-      "inscrito": false,
+
       "sigla": "TLQV",
       "nome": "Tecnologias Limpas e Química Verde",
       "departamento": "DQ",
@@ -360,7 +360,7 @@
       "rating": 2.2
     },
     {
-      "inscrito": false,
+
       "sigla": "EBR",
       "nome": "Efeitos Biológicos da Radiação",
       "departamento": "DQ",
@@ -369,7 +369,7 @@
       "rating": 3
     },
     {
-      "inscrito": false,
+
       "sigla": "CP",
       "nome": "Ciência dos Polímeros",
       "departamento": "DQ",
@@ -378,7 +378,7 @@
       "rating": 4.1
     },
     {
-      "inscrito": false,
+
       "sigla": "E",
       "nome": "Electrobiotecnologia",
       "departamento": "DQ",
@@ -387,7 +387,7 @@
       "rating": 1.2
     },
     {
-      "inscrito": false,
+
       "sigla": "MIA",
       "nome": "Métodos Instrumentais de Análise",
       "departamento": "DQ",
@@ -396,7 +396,7 @@
       "rating": 0.7
     },
     {
-      "inscrito": false,
+
       "sigla": "MS",
       "nome": "Modelação de Sistemas",
       "departamento": "DM",
@@ -405,7 +405,7 @@
       "rating": 0.4
     },
     {
-      "inscrito": false,
+
       "sigla": "MAD",
       "nome": "Modelos de Apoio à Decisão",
       "departamento": "DM",
@@ -414,7 +414,7 @@
       "rating": 1.8
     },
     {
-      "inscrito": false,
+
       "sigla": "CF",
       "nome": "Cálculo Financeiro",
       "departamento": "DM",
@@ -423,7 +423,7 @@
       "rating": 0.1
     },
     {
-      "inscrito": false,
+
       "sigla": "ENC",
       "nome": "Estatística Numérica Computacional",
       "departamento": "DM",
@@ -432,7 +432,7 @@
       "rating": 1.3
     },
     {
-      "inscrito": false,
+
       "sigla": "CC",
       "nome": "Computabilidade e Complexidade",
       "departamento": "DM",
@@ -441,7 +441,7 @@
       "rating": 4.7
     },
     {
-      "inscrito": false,
+
       "sigla": "C",
       "nome": "Criptografia",
       "departamento": "DM",
@@ -450,7 +450,7 @@
       "rating": 3.1
     },
     {
-      "inscrito": false,
+
       "sigla": "AC",
       "nome": "Álgebra Computacional",
       "departamento": "DM",
@@ -459,7 +459,7 @@
       "rating": 1.6
     },
     {
-      "inscrito": false,
+
       "sigla": "ECT",
       "nome": "Engenharia de Células e Tecidos",
       "departamento": "DF",
@@ -468,7 +468,7 @@
       "rating": 1.2
     },
     {
-      "inscrito": false,
+
       "sigla": "FA",
       "nome": "Física Atómica",
       "departamento": "DF",
@@ -477,7 +477,7 @@
       "rating": 3.9
     },
     {
-      "inscrito": false,
+
       "sigla": "FES",
       "nome": "Física do Estado Sólido",
       "departamento": "DF",
@@ -486,7 +486,7 @@
       "rating": 4.5
     },
     {
-      "inscrito": false,
+
       "sigla": "FE",
       "nome": "Física Estatística",
       "departamento": "DF",
@@ -495,7 +495,7 @@
       "rating": 1.3
     },
     {
-      "inscrito": false,
+
       "sigla": "I",
       "nome": "Imagiologia",
       "departamento": "DF",
@@ -504,7 +504,7 @@
       "rating": 2.7
     },
     {
-      "inscrito": false,
+
       "sigla": "MQ",
       "nome": "Mecânica Quântica",
       "departamento": "DF",
@@ -513,7 +513,7 @@
       "rating": 4.2
     },
     {
-      "inscrito": false,
+
       "sigla": "MIM",
       "nome": "Métodos de Imagem Médica",
       "departamento": "DF",
@@ -522,7 +522,7 @@
       "rating": 1.1
     },
     {
-      "inscrito": false,
+
       "sigla": "FM",
       "nome": "Física Molecular",
       "departamento": "DF",
@@ -531,7 +531,7 @@
       "rating": 4.1
     },
     {
-      "inscrito": false,
+
       "sigla": "C",
       "nome": "Criogenia",
       "departamento": "DF",
@@ -540,7 +540,7 @@
       "rating": 4
     },
     {
-      "inscrito": false,
+
       "sigla": "TE",
       "nome": "Técnicas de Espetroscopia",
       "departamento": "DF",
@@ -549,7 +549,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "MMF",
       "nome": "Métodos Matemáticos da Física",
       "departamento": "DF",
@@ -558,7 +558,7 @@
       "rating": 4.9
     },
     {
-      "inscrito": false,
+
       "sigla": "DAC",
       "nome": "Desenho Assistido por Computador",
       "departamento": "DEMI",
@@ -567,7 +567,7 @@
       "rating": 2.4
     },
     {
-      "inscrito": false,
+
       "sigla": "EA",
       "nome": "Energia e Ambiente",
       "departamento": "DEMI",
@@ -576,7 +576,7 @@
       "rating": 2.7
     },
     {
-      "inscrito": false,
+
       "sigla": "FE",
       "nome": "Finanças para Empreendedores",
       "departamento": "DEMI",
@@ -585,7 +585,7 @@
       "rating": 3.9
     },
     {
-      "inscrito": false,
+
       "sigla": "GP",
       "nome": "Gestão da Produção",
       "departamento": "DEMI",
@@ -594,7 +594,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "GQ",
       "nome": "Gestão da Qualidade",
       "departamento": "DEMI",
@@ -603,7 +603,7 @@
       "rating": 1.8
     },
     {
-      "inscrito": false,
+
       "sigla": "GP",
       "nome": "Gestão de Projetos",
       "departamento": "DEMI",
@@ -612,7 +612,7 @@
       "rating": 2.3
     },
     {
-      "inscrito": false,
+
       "sigla": "MI",
       "nome": "Marketing e Inovação",
       "departamento": "DEMI",
@@ -621,7 +621,7 @@
       "rating": 0.8
     },
     {
-      "inscrito": false,
+
       "sigla": "PAFED",
       "nome": "Processos Avançados de Fabrico e Ensaios não Destrutivos",
       "departamento": "DEMI",
@@ -630,7 +630,7 @@
       "rating": 1.1
     },
     {
-      "inscrito": false,
+
       "sigla": "SHO",
       "nome": "Segurança e Higiene Ocupacionais",
       "departamento": "DEMI",
@@ -639,7 +639,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "IT",
       "nome": "Introdução às Telecomunicações",
       "departamento": "DEE",
@@ -648,7 +648,7 @@
       "rating": 3.5
     },
     {
-      "inscrito": false,
+
       "sigla": "EV",
       "nome": "Empresas Virtuais",
       "departamento": "DEE",
@@ -657,7 +657,7 @@
       "rating": 4.5
     },
     {
-      "inscrito": false,
+
       "sigla": "PISF",
       "nome": "Projeto de Instalações Solares e Fotovoltaicas",
       "departamento": "DEE",
@@ -666,7 +666,7 @@
       "rating": 2
     },
     {
-      "inscrito": false,
+
       "sigla": "SS",
       "nome": "Sistemas Sensoriais",
       "departamento": "DEE",
@@ -675,7 +675,7 @@
       "rating": 3.2
     },
     {
-      "inscrito": false,
+
       "sigla": "CSD",
       "nome": "Conceção de Sistemas Digitais",
       "departamento": "DEE",
@@ -684,7 +684,7 @@
       "rating": 0.8
     },
     {
-      "inscrito": false,
+
       "sigla": "EMSBM",
       "nome": "Electrónica para Micro-Sistemas Biomédicos e Multimédia",
       "departamento": "DEE",
@@ -693,7 +693,7 @@
       "rating": 3.5
     },
     {
-      "inscrito": false,
+
       "sigla": "A",
       "nome": "Arquitetura",
       "departamento": "DEC",
@@ -702,7 +702,7 @@
       "rating": 3.1
     },
     {
-      "inscrito": false,
+
       "sigla": "DAC",
       "nome": "Desenho Assistido por Computador",
       "departamento": "DEC",
@@ -711,7 +711,7 @@
       "rating": 2
     },
     {
-      "inscrito": false,
+
       "sigla": "DT",
       "nome": "Desenho Técnico",
       "departamento": "DEC",
@@ -720,7 +720,7 @@
       "rating": 3.8
     },
     {
-      "inscrito": false,
+
       "sigla": "E",
       "nome": "Estática",
       "departamento": "DEC",
@@ -729,7 +729,7 @@
       "rating": 1.5
     },
     {
-      "inscrito": false,
+
       "sigla": "MEF",
       "nome": "Método dos Elementos Finitos",
       "departamento": "DEC",
@@ -738,7 +738,7 @@
       "rating": 2.1
     },
     {
-      "inscrito": false,
+
       "sigla": "MC1",
       "nome": "Materiais de Construção I",
       "departamento": "DEC",
@@ -747,7 +747,7 @@
       "rating": 1.8
     },
     {
-      "inscrito": false,
+
       "sigla": "BCC",
       "nome": "Biologia Celular C",
       "departamento": "DCV",
@@ -756,7 +756,7 @@
       "rating": 1.4
     },
     {
-      "inscrito": false,
+
       "sigla": "IB",
       "nome": "Introdução à Biologia",
       "departamento": "DCV",
@@ -765,7 +765,7 @@
       "rating": 1.3
     },
     {
-      "inscrito": false,
+
       "sigla": "PEB",
       "nome": "Produção de Energia a partir da Biomassa",
       "departamento": "DCTB",
@@ -774,7 +774,7 @@
       "rating": 0.2
     },
     {
-      "inscrito": false,
+
       "sigla": "PUBL",
       "nome": "Produção e Utilização de Biocombustíveis Líquidos",
       "departamento": "DCTB",
@@ -783,7 +783,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "QBA",
       "nome": "Química e Bioquímica dos Alimentos",
       "departamento": "DCTB",
@@ -792,7 +792,7 @@
       "rating": 2.3
     },
     {
-      "inscrito": false,
+
       "sigla": "TA",
       "nome": "Toxicologia Alimentar",
       "departamento": "DCTB",
@@ -801,7 +801,7 @@
       "rating": 2.7
     },
     {
-      "inscrito": false,
+
       "sigla": "GG",
       "nome": "Geologia Geral",
       "departamento": "DCT",
@@ -810,7 +810,7 @@
       "rating": 1.7
     },
     {
-      "inscrito": false,
+
       "sigla": "GQA",
       "nome": "Gestão e Qualidade da Água",
       "departamento": "DCT",
@@ -819,7 +819,7 @@
       "rating": 4
     },
     {
-      "inscrito": false,
+
       "sigla": "H",
       "nome": "Hidrogeologia",
       "departamento": "DCT",
@@ -828,7 +828,7 @@
       "rating": 1.9
     },
     {
-      "inscrito": false,
+
       "sigla": "PAS",
       "nome": "Produção Agro-industrial e Sustentabilidade",
       "departamento": "DCT",
@@ -837,7 +837,7 @@
       "rating": 2.5
     },
     {
-      "inscrito": false,
+
       "sigla": "TP",
       "nome": "Tecnologia de Pedreiras",
       "departamento": "DCT",
@@ -846,7 +846,7 @@
       "rating": 4.2
     },
     {
-      "inscrito": false,
+
       "sigla": "MPA",
       "nome": "Matérias-Primas Alimentares",
       "departamento": "DCT",
@@ -855,7 +855,7 @@
       "rating": 4.8
     },
     {
-      "inscrito": false,
+
       "sigla": "FSPAI",
       "nome": "Factores de Stress e Produtividade Agro-Industrial",
       "departamento": "DCT",
@@ -864,7 +864,7 @@
       "rating": 3.1
     },
     {
-      "inscrito": false,
+
       "sigla": "GTD",
       "nome": "Geostatística e Tratamento de Dados",
       "departamento": "DCT",
@@ -873,7 +873,7 @@
       "rating": 0.8
     },
     {
-      "inscrito": false,
+
       "sigla": "GE",
       "nome": "Gestão de Empresas",
       "departamento": "DCSA",
@@ -882,7 +882,7 @@
       "rating": 4.2
     },
     {
-      "inscrito": false,
+
       "sigla": "HTE",
       "nome": "História da Tecnologia e da Engenharia",
       "departamento": "DCSA",
@@ -891,7 +891,7 @@
       "rating": 0.6
     },
     {
-      "inscrito": false,
+
       "sigla": "HC",
       "nome": "História das Ciências",
       "departamento": "DCSA",
@@ -900,7 +900,7 @@
       "rating": 2.9
     },
     {
-      "inscrito": false,
+
       "sigla": "MG",
       "nome": "Macroeconomia e Globalização",
       "departamento": "DCSA",
@@ -909,7 +909,7 @@
       "rating": 3.9
     },
     {
-      "inscrito": false,
+
       "sigla": "PC",
       "nome": "Pensamento Contemporâneo",
       "departamento": "DCSA",
@@ -918,7 +918,7 @@
       "rating": 1
     },
     {
-      "inscrito": false,
+
       "sigla": "SNTI",
       "nome": "Sociologia das Novas Tecnologias de Informação",
       "departamento": "DCSA",
@@ -927,7 +927,7 @@
       "rating": 1.8
     },
     {
-      "inscrito": false,
+
       "sigla": "SO",
       "nome": "Sociologia das Organizações",
       "departamento": "DCSA",
@@ -936,7 +936,7 @@
       "rating": 1.1
     },
     {
-      "inscrito": false,
+
       "sigla": "SEI",
       "nome": "Sócio-Economia da Inovação",
       "departamento": "DCSA",
@@ -945,7 +945,7 @@
       "rating": 2.1
     },
     {
-      "inscrito": false,
+
       "sigla": "M",
       "nome": "Microeconomia",
       "departamento": "DCSA",
@@ -954,7 +954,7 @@
       "rating": 1.4
     },
     {
-      "inscrito": false,
+
       "sigla": "HAC",
       "nome": "História da Arte Contemporânea",
       "departamento": "DCR",
@@ -963,7 +963,7 @@
       "rating": 4.7
     },
     {
-      "inscrito": false,
+
       "sigla": "HAIM",
       "nome": "História da Arte da Idade Moderna",
       "departamento": "DCR",
@@ -972,7 +972,7 @@
       "rating": 3.7
     },
     {
-      "inscrito": false,
+
       "sigla": "HVC",
       "nome": "História do Vidro e da Cerâmica",
       "departamento": "DCR",
@@ -981,7 +981,7 @@
       "rating": 0.6
     },
     {
-      "inscrito": false,
+
       "sigla": "SI",
       "nome": "Seminário de Iconografia",
       "departamento": "DCR",
@@ -990,7 +990,7 @@
       "rating": 4.3
     },
     {
-      "inscrito": false,
+
       "sigla": "SADC1",
       "nome": "Seminário em Arte, Design e Ciência I",
       "departamento": "DCR",
@@ -999,7 +999,7 @@
       "rating": 4.7
     },
     {
-      "inscrito": false,
+
       "sigla": "SADC2",
       "nome": "Seminário em Arte, Design e Ciência II",
       "departamento": "DCR",
@@ -1008,7 +1008,7 @@
       "rating": 2.1
     },
     {
-      "inscrito": false,
+
       "sigla": "B",
       "nome": "Biomateriais",
       "departamento": "DCM",
@@ -1017,7 +1017,7 @@
       "rating": 3.7
     },
     {
-      "inscrito": false,
+
       "sigla": "B",
       "nome": "Biossensores",
       "departamento": "DCM",
@@ -1026,7 +1026,7 @@
       "rating": 1.4
     },
     {
-      "inscrito": false,
+
       "sigla": "CM",
       "nome": "Ciência dos Materiais",
       "departamento": "DCM",
@@ -1035,7 +1035,7 @@
       "rating": 0.6
     },
     {
-      "inscrito": false,
+
       "sigla": "MCCE",
       "nome": "Materiais para a Conversão e Conservação de Energia",
       "departamento": "DCM",
@@ -1044,7 +1044,7 @@
       "rating": 3.8
     },
     {
-      "inscrito": false,
+
       "sigla": "QP",
       "nome": "Química dos Polímeros",
       "departamento": "DCM",
@@ -1053,7 +1053,7 @@
       "rating": 0.2
     },
     {
-      "inscrito": false,
+
       "sigla": "TN",
       "nome": "Tecnologia de Nanomateriais",
       "departamento": "DCM",
@@ -1062,7 +1062,7 @@
       "rating": 1
     },
     {
-      "inscrito": false,
+
       "sigla": "M1",
       "nome": "Microeletrónica I",
       "departamento": "DCM",
@@ -1071,7 +1071,7 @@
       "rating": 1.8
     },
     {
-      "inscrito": false,
+
       "sigla": "MSI",
       "nome": "Materiais e Sistemas Inteligentes",
       "departamento": "DCM",
@@ -1080,7 +1080,7 @@
       "rating": 4.2
     },
     {
-      "inscrito": false,
+
       "sigla": "GEI",
       "nome": "Gravação Eletrónica de Informação",
       "departamento": "DCM",
@@ -1089,7 +1089,7 @@
       "rating": 0.7
     },
     {
-      "inscrito": false,
+
       "sigla": "FM",
       "nome": "Fotónica em Materiais",
       "departamento": "DCM",

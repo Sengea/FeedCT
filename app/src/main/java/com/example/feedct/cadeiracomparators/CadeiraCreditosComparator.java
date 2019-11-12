@@ -1,6 +1,6 @@
 package com.example.feedct.cadeiracomparators;
 
-import com.example.feedct.Cadeira;
+import com.example.feedct.jsonpojos.Cadeira;
 
 import java.util.Comparator;
 
