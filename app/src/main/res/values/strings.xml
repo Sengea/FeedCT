@@ -19,4 +19,9 @@
     <string name="login_failed">"Login falhou"</string>
     <string name="semestreFilter">Semestre</string>
     <string name="departamentoFilter">Departamento</string>
+    <string name="prompt_curso">Curso</string>
+    <string name="order_by">Ordenar por:</string>
+    <string name="date">Data</string>
+    <string name="votes">Votos</string>
+    <string name="cursoFilter">Curso</string>
 </resources>

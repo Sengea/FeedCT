@@ -39,7 +39,6 @@ public class MinhasFragment extends Fragment {
         updateCadeiras();
         adapter.setData(cadeiras);
 
-
         return  view;
     }
 

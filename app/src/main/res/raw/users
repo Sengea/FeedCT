@@ -3,18 +3,42 @@
     "email" : "af.moura@campus.fct.unl.pt",
     "password" : "50739",
     "nome" : "André Moura",
-    "numero" : 50739
+    "numero" : 50739,
+    "curso" : "MIEI"
   },
   {
     "email" : "c.rosalino@campus.fct.unl.pt",
     "password" : "48175",
     "nome" : "Cláudia Rosalino",
-    "numero" : 48175
+    "numero" : 48175,
+    "curso" : "MIEI"
   },
   {
     "email" : "mf.andrade@campus.fct.unl.pt",
     "password" : "47131",
     "nome" : "Miguel Andrade",
-    "numero" : 47131
+    "numero" : 47131,
+    "curso" : "MIEI"
+  },
+  {
+    "email" : "m.carvalho@campus.fct.unl.pt",
+    "password" : "m.carvalho",
+    "nome" : "Maria Carvalho",
+    "numero" : 1,
+    "curso" : "MIEI"
+  },
+  {
+    "email" : "c.santos@campus.fct.unl.pt",
+    "password" : "c.santos",
+    "nome" : "Carolina Santos",
+    "numero" : 2,
+    "curso" : "MIEI"
+  },
+  {
+    "email" : "j.andrade@campus.fct.unl.pt",
+    "password" : "j.andrade",
+    "nome" : "João Andrade",
+    "numero" : 3,
+    "curso" : "LQB"
   }
 ]

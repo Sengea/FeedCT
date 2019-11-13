@@ -50,9 +50,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
-        new JSONManager(getResources());
-        new Session("af.moura@campus.fct.unl.pt");
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonSemestre"
+        android:id="@+id/buttonCurso"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/todasRecyclerView"

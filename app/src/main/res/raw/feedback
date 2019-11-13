@@ -1,0 +1,30 @@
+[
+  {
+    "userEmail" : "m.carvalho@campus.fct.unl.pt",
+    "cadeiraName" : "Sistemas Sensoriais",
+    "opinion" : "Graças às bases de Informática achei esta cadeira fácil e gostei das aulas",
+    "date" : "17/11/2018",
+    "votes" : 57
+  },
+  {
+    "userEmail" : "c.santos@campus.fct.unl.pt",
+    "cadeiraName" : "História da Arte da Idade Moderna",
+    "opinion" : "Tive dificuldades nesta cadeira",
+    "date" : "21/10/2018",
+    "votes" : 73
+  },
+  {
+    "userEmail" : "j.andrade@campus.fct.unl.pt",
+    "cadeiraName" : "Sistemas Sensoriais",
+    "opinion" : "Gostei muito desta cadeira",
+    "date" : "11/09/2018",
+    "votes" : 63
+  },
+  {
+    "userEmail" : "j.andrade@campus.fct.unl.pt",
+    "cadeiraName" : "História da Arte da Idade Moderna",
+    "opinion" : "Gostei muito desta cadeira",
+    "date" : "11/09/2018",
+    "votes" : 63
+  }
+]

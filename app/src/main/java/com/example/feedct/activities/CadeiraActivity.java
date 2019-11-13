@@ -13,6 +13,7 @@ import com.example.feedct.JSONManager;
 import com.example.feedct.R;
 import com.example.feedct.adapters.SectionsPageAdapter;
 import com.example.feedct.fragments.CadeiraFragment;
+import com.example.feedct.fragments.FeedbackFragment;
 import com.example.feedct.jsonpojos.Cadeira;
 import com.google.android.material.tabs.TabLayout;
 
@@ -30,10 +31,10 @@ public class CadeiraActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(cadeira.getSigla());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
@@ -57,6 +58,7 @@ public class CadeiraActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new CadeiraFragment(cadeira), "Cadeira");
+        adapter.addFragment(new FeedbackFragment(cadeira), "Feedback");
         viewPager.setAdapter(adapter);
     }
 
@@ -66,3 +68,4 @@ public class CadeiraActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
