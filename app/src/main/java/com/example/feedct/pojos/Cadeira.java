@@ -1,4 +1,4 @@
-package com.example.feedct.jsonpojos;
+package com.example.feedct.pojos;
 
 public class Cadeira implements Comparable<Cadeira> {
     private String sigla;
@@ -7,6 +7,10 @@ public class Cadeira implements Comparable<Cadeira> {
     private int semestre;
     private int creditos;
     private float rating;
+
+    public Cadeira() {
+
+    }
 
     public Cadeira(String sigla, String nome, String departamento, int semestre, int creditos, float rating) {
         this.sigla = sigla;
@@ -35,14 +39,6 @@ public class Cadeira implements Comparable<Cadeira> {
 
     public float getRating() {
         return rating;
-    }
-
-    public String getSemestreText() {
-        return String.valueOf(semestre) + "º SEM";
-    }
-
-    public String getCreditosText() {
-        return String.valueOf(creditos) + " ECTS";
     }
 
     @Override

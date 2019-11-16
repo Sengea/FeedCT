@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.feedct.activities.CadeiraActivity;
-import com.example.feedct.jsonpojos.Cadeira;
+import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.Departamento;
 import com.example.feedct.R;
 
@@ -147,8 +147,8 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             siglaTextView.setText(cadeira.getSigla());
             nomeTextView.setText(cadeira.getNome());
             departamentoTextView.setText(cadeira.getDepartamento());
-            semestreTextView.setText(cadeira.getSemestreText());
-            creditosTextView.setText(cadeira.getCreditosText());
+            semestreTextView.setText(cadeira.getSemestre() + "º SEM");
+            creditosTextView.setText(cadeira.getCreditos() + " ECTS");
             ratingBar.setRating(cadeira.getRating());
         }
     }

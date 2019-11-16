@@ -1,10 +1,13 @@
-package com.example.feedct.jsonpojos;
+package com.example.feedct.pojos;
 
 public class CadeiraUser {
     private String nomeCadeira;
     private String emailUser;
-
     private String turno;
+
+    public CadeiraUser() {
+
+    }
 
     public CadeiraUser(String nomeCadeira, String emailUser, String turno) {
         this.nomeCadeira = nomeCadeira;

@@ -1,4 +1,4 @@
-package com.example.feedct.jsonpojos;
+package com.example.feedct.pojos;
 
 public class User {
     private String email;
@@ -6,6 +6,10 @@ public class User {
     private String nome;
     private int numero;
     private String curso;
+
+    public User() {
+
+    }
 
     public User(String email, String password, String nome, int numero, String curso) {
         this.email = email;

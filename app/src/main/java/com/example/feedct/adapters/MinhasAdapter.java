@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.feedct.activities.CadeiraActivity;
-import com.example.feedct.jsonpojos.Cadeira;
+import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.R;
 
 import java.util.LinkedList;
@@ -63,8 +63,8 @@ public class MinhasAdapter extends BaseAdapter {
         siglaTextView.setText(current_cadeiras.get(position).getSigla());
         nomeTextView.setText(current_cadeiras.get(position).getNome());
         departamentoTextView.setText(current_cadeiras.get(position).getDepartamento());
-        semestreTextView.setText(current_cadeiras.get(position).getSemestreText());
-        creditosTextView.setText(current_cadeiras.get(position).getCreditosText());
+        semestreTextView.setText(current_cadeiras.get(position).getSemestre() + "º SEM");
+        creditosTextView.setText(current_cadeiras.get(position).getCreditos() + " ECTS");
         ratingBar.setRating(current_cadeiras.get(position).getRating());
 
         convertView.setOnClickListener(new View.OnClickListener() {

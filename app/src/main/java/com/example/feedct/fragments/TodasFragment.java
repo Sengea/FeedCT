@@ -20,14 +20,18 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.feedct.DataManager;
 import com.example.feedct.Departamento;
-import com.example.feedct.JSONManager;
 import com.example.feedct.R;
 import com.example.feedct.Session;
 import com.example.feedct.adapters.TodasAdapter;
 import com.example.feedct.cadeiracomparators.CadeiraNameComparator;
-import com.example.feedct.jsonpojos.Cadeira;
-import com.example.feedct.jsonpojos.CadeiraUser;
+import com.example.feedct.pojos.Cadeira;
+import com.example.feedct.pojos.CadeiraUser;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,12 +44,15 @@ public class TodasFragment extends Fragment {
     private TodasAdapter adapter;
     private SortedSet<Departamento> departamentos;
     private SortedSet<Departamento> departamentosBearingFilter;
+    private boolean initialized = false;
 
     private boolean sem1IsFiltered;
     private boolean sem2IsFiltered;
     private boolean[] departamentoIsFiltered;
+    private String currentSearch;
 
-    private String currentSearch = "";
+    private Button buttonDepartamento;
+    private ImageButton imageButtonCancelDepartamento;
 
     @Nullable
     @Override
@@ -66,19 +73,12 @@ public class TodasFragment extends Fragment {
         adapter = new TodasAdapter(view.getContext());
         recyclerView.setAdapter(adapter);
 
-        updateDepartamentos();
-        adapter.setData(departamentos);
-        departamentosBearingFilter = departamentos;
-        departamentoIsFiltered = new boolean[departamentos.size()];
-        sem1IsFiltered = false;
-        sem2IsFiltered = false;
-
-        final ImageButton imageButtonCancelDepartamento = view.findViewById(R.id.imageButtonCancelDepartamento);
+        imageButtonCancelDepartamento = view.findViewById(R.id.imageButtonCancelDepartamento);
         final ImageButton imageButtonCancelSemestre = view.findViewById(R.id.imageButtonCancelSemestre);
         imageButtonCancelDepartamento.setVisibility(View.GONE);
         imageButtonCancelSemestre.setVisibility(View.GONE);
 
-        final Button buttonDepartamento = view.findViewById(R.id.buttonDepartamento);
+        buttonDepartamento = view.findViewById(R.id.buttonDepartamento);
         final Button buttonSemestre = view.findViewById(R.id.buttonCurso);
 
         buttonDepartamento.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +101,7 @@ public class TodasFragment extends Fragment {
                 builder.setPositiveButton("Filtrar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        updateAdapterData(buttonDepartamento, imageButtonCancelDepartamento);
+                        updateAdapterData();
                     }
                 });
 
@@ -134,7 +134,7 @@ public class TodasFragment extends Fragment {
                         buttonSemestre.setText(filterText);
                         imageButtonCancelSemestre.setVisibility(View.VISIBLE);
 
-                        updateAdapterData(buttonDepartamento, imageButtonCancelDepartamento);
+                        updateAdapterData();
                     }
                 });
 
@@ -152,7 +152,7 @@ public class TodasFragment extends Fragment {
                 buttonDepartamento.setText(getString(R.string.departamentoFilter));
                 imageButtonCancelDepartamento.setVisibility(View.GONE);
 
-                updateAdapterData(buttonDepartamento, imageButtonCancelDepartamento);
+                updateAdapterData();
             }
         });
 
@@ -165,7 +165,7 @@ public class TodasFragment extends Fragment {
                 buttonSemestre.setText(getString(R.string.semestreFilter));
                 imageButtonCancelSemestre.setVisibility(View.GONE);
 
-                updateAdapterData(buttonDepartamento, imageButtonCancelDepartamento);
+                updateAdapterData();
             }
         });
 
@@ -177,8 +177,9 @@ public class TodasFragment extends Fragment {
         super.onStart();
 
         updateDepartamentos();
-        adapter.setData(searchInDepartamentos(currentSearch));
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -202,8 +203,8 @@ public class TodasFragment extends Fragment {
         });
     }
 
-    private void updateAdapterData(Button buttonDepartamento, ImageButton imageButtonCancelDepartamento) {
-        SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos, buttonDepartamento, imageButtonCancelDepartamento);
+    private void updateAdapterData() {
+        SortedSet<Departamento> filteredDepartamentos = applyDepartamentoFilter(departamentos);
         filteredDepartamentos = applySemestreFilter(filteredDepartamentos);
         departamentosBearingFilter = filteredDepartamentos;
 
@@ -211,7 +212,7 @@ public class TodasFragment extends Fragment {
         adapter.setData(filteredDepartamentos);
     }
 
-    private SortedSet<Departamento> applyDepartamentoFilter(SortedSet<Departamento> departamentos, Button buttonDepartamento, ImageButton imageButtonCancelDepartamentos) {
+    private SortedSet<Departamento> applyDepartamentoFilter(SortedSet<Departamento> departamentos) {
         StringBuilder filterText = new StringBuilder();
         SortedSet<Departamento> filteredDepartamentos = new TreeSet<>();
         int i = 0;
@@ -224,14 +225,12 @@ public class TodasFragment extends Fragment {
 
         if (filteredDepartamentos.isEmpty()) {
             filteredDepartamentos = departamentos;
-            departamentosBearingFilter = departamentos;
             filterText = new StringBuilder(getString(R.string.departamentoFilter));
-            imageButtonCancelDepartamentos.setVisibility(View.GONE);
+            imageButtonCancelDepartamento.setVisibility(View.GONE);
         }
         else {
-            departamentosBearingFilter = filteredDepartamentos;
             filterText = new StringBuilder(filterText.toString().trim().replace(" ", ", "));
-            imageButtonCancelDepartamentos.setVisibility(View.VISIBLE);
+            imageButtonCancelDepartamento.setVisibility(View.VISIBLE);
         }
 
         buttonDepartamento.setText(filterText.toString());
@@ -264,6 +263,9 @@ public class TodasFragment extends Fragment {
     private SortedSet<Departamento> searchInDepartamentos(String search) {
         SortedSet<Departamento> departamentosBearingSearch = new TreeSet<>();
 
+        if (search == null || search.equals(""))
+            return departamentosBearingFilter;
+
         for(Departamento departamento : departamentosBearingFilter) {
             // Pesquisa coincide com o nome de um departamento
             if (departamento.getName().toLowerCase().startsWith(search.toLowerCase()))
@@ -288,35 +290,55 @@ public class TodasFragment extends Fragment {
     }
 
     private void updateDepartamentos() {
-        List<String> minhasNames = new LinkedList<>();
-        for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
-            if (cadeiraUser.getEmailUser().equals(Session.userEmail))
-                minhasNames.add(cadeiraUser.getNomeCadeira());
-        }
-
-        HashMap<String, Departamento> departamentoByName = new HashMap<>();
-        departamentos = new TreeSet<>();
-
-        for (Cadeira cadeira : JSONManager.cadeiras) {
-            if(!minhasNames.contains(cadeira.getNome())) {
-                String nomeDepartamento = cadeira.getDepartamento();
-
-                Departamento departamento = departamentoByName.get(nomeDepartamento);
-                if (departamento == null) {
-                    departamento = new Departamento(nomeDepartamento);
-                    departamentos.add(departamento);
-
-                    departamentoByName.put(nomeDepartamento, departamento);
+        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                final List<String> minhasNames = new LinkedList<>();
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    minhasNames.add(document.toObject(CadeiraUser.class).getNomeCadeira());
                 }
+                DataManager.db.collection("cadeiras").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        departamentos = new TreeSet<>();
+                        HashMap<String, Departamento> departamentoByName = new HashMap<>();
+                        List<Cadeira> cadeiras = new LinkedList<>();
+                        for (DocumentSnapshot document : queryDocumentSnapshots) {
+                            Cadeira cadeira = document.toObject(Cadeira.class);
+                            if (!minhasNames.contains(cadeira.getNome())) {
+                                String nomeDepartamento = cadeira.getDepartamento();
 
-                departamento.addCadeira(cadeira);
+                                Departamento departamento = departamentoByName.get(nomeDepartamento);
+                                if (departamento == null) {
+                                    departamento = new Departamento(nomeDepartamento);
+                                    departamentos.add(departamento);
+
+                                    departamentoByName.put(nomeDepartamento, departamento);
+                                }
+
+                                departamento.addCadeira(cadeira);
+                            }
+                        }
+
+                        Comparator<Cadeira> comparator = new CadeiraNameComparator();
+                        for (Departamento departamento : departamentos) {
+                            departamento.sortCadeiras(comparator);
+                        }
+
+                        if (!initialized) {
+                            adapter.setData(departamentos);
+                            departamentosBearingFilter = departamentos;
+                            departamentoIsFiltered = new boolean[departamentos.size()];
+                            sem1IsFiltered = false;
+                            sem2IsFiltered = false;
+                            initialized = true;
+                        }
+                        else {
+                            updateAdapterData();
+                        }
+                    }
+                });
             }
-        }
-
-        // Para cada derpatamento ordenar por nome
-        Comparator<Cadeira> comparator = new CadeiraNameComparator();
-        for (Departamento departamento : departamentos) {
-            departamento.sortCadeiras(comparator);
-        }
+        });
     }
 }

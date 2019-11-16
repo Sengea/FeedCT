@@ -6,6 +6,6 @@ public class MyCustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        new JSONManager(getResources());
+        new DataManager(getResources());
     }
 }

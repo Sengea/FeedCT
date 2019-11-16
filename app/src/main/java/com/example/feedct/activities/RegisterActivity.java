@@ -11,25 +11,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TabWidget;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import com.example.feedct.JSONManager;
+import com.example.feedct.DataManager;
 import com.example.feedct.R;
-import com.example.feedct.jsonpojos.Curso;
-import com.example.feedct.jsonpojos.User;
+import com.example.feedct.pojos.Curso;
+import com.example.feedct.pojos.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.w3c.dom.Text;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
+    private boolean doRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
                     showCursoDialog(v, cursoEditText);
             }
         });
-       /* cursoEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCursoDialog(v, cursoEditText);
-            }
-        });*/
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,79 +150,91 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        doRegistry = true;
         Button buttonRegistar = findViewById(R.id.registar);
         buttonRegistar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
-                String email = username + usernameTextInputLayout.getSuffixText();
-                String password = passwordEditText.getText().toString();
-                String passwordConfirm = passwordConfirmEditText.getText().toString();
-                String name = nameEditText.getText().toString();
-                String number = numberEditText.getText().toString();
-
-                boolean doRegestry = true;
+            public void onClick(final View v) {
+                final String username = usernameEditText.getText().toString();
+                final String email = username + usernameTextInputLayout.getSuffixText();
+                final String password = passwordEditText.getText().toString();
+                final String passwordConfirm = passwordConfirmEditText.getText().toString();
+                final String name = nameEditText.getText().toString();
+                final String number = numberEditText.getText().toString();
+                final String curso = cursoEditText.getText().toString();
 
                 if (TextUtils.isEmpty(username)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     usernameTextInputLayout.setErrorEnabled(true);
                     usernameTextInputLayout.setError("Campo obrigatório");
-
-                } else {
-                    boolean found = false;
-                    for (User user : JSONManager.users) {
-                        if (user.getEmail().equals(email)) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found) {
-                        doRegestry = false;
-                        usernameTextInputLayout.setErrorEnabled(true);
-                        usernameTextInputLayout.setError("Email já está em uso");
-                    }
                 }
+
                 if (TextUtils.isEmpty(password)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     passwordTextInputLayout.setErrorEnabled(true);
                     passwordTextInputLayout.setError("Campo obrigatório");
                 }
                 if (TextUtils.isEmpty(passwordConfirm)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     passwordConfirmTextInputLayout.setErrorEnabled(true);
                     passwordConfirmTextInputLayout.setError("Campo obrigatório");
                 } else if (!password.equals(passwordConfirm)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     passwordConfirmTextInputLayout.setErrorEnabled(true);
                     passwordConfirmTextInputLayout.setError("Passwords não são iguais");
                 }
 
                 if (TextUtils.isEmpty(name)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     nameTextInputLayout.setErrorEnabled(true);
                     nameTextInputLayout.setError("Campo obrigatório");
-
                 }
+
                 if (TextUtils.isEmpty(number)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     numberTextInputLayout.setErrorEnabled(true);
                     numberTextInputLayout.setError("Campo obrigatório");
                 }
                 else if (!TextUtils.isDigitsOnly(number)) {
-                    doRegestry = false;
+                    doRegistry = false;
                     numberTextInputLayout.setErrorEnabled(true);
                     numberTextInputLayout.setError("Campo deve ser um número");
                 }
 
+                if (TextUtils.isEmpty(curso)) {
+                    doRegistry = false;
+                    cursoTextInputLayout.setErrorEnabled(true);
+                    cursoTextInputLayout.setError("Campo obrigatório");
+                }
 
-                if (doRegestry) {
-                    JSONManager.users.add(new User(email, password, name, Integer.valueOf(number), "teste"));
+                DataManager.db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
+                        boolean emailIsTaken = false;
+                        if (documentSnapshots.size() > 0) {
+                            emailIsTaken = true;
+                            usernameTextInputLayout.setErrorEnabled(true);
+                            usernameTextInputLayout.setError("Email já está em uso");
+                        }
+
+                        if (doRegistry && !emailIsTaken) {
+                            DataManager.db.collection("users").add(new User(email, password, name, Integer.valueOf(number), curso));
+                            Toast toast = Toast.makeText(v.getContext(), "Conta criada com sucesso.", Toast.LENGTH_SHORT);
+                            toast.show();
+
+                            v.getContext().startActivity(new Intent(v.getContext(), LoginActivity.class));
+                        }
+                    }
+                });
+
+                /*if (doRegistry) {
+                    DataManager.db.collection("users").add(new User(email, password, name, Integer.valueOf(number), curso));
                     Toast toast = Toast.makeText(v.getContext(), "Conta criada com sucesso.", Toast.LENGTH_SHORT);
                     toast.show();
 
                     v.getContext().startActivity(new Intent(v.getContext(), LoginActivity.class));
-                }
+                }*/
             }
         });
     }
@@ -244,7 +250,7 @@ public class RegisterActivity extends AppCompatActivity {
         builder.setTitle("Curso");
 
         final List<String> cursosSiglas = new LinkedList<>();
-        for (Curso curso : JSONManager.cursos) {
+        for (Curso curso : DataManager.cursos) {
             cursosSiglas.add(curso.getSigla());
         }
 

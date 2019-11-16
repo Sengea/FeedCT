@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.feedct.R;
-import com.example.feedct.jsonpojos.AtendimentoDocente;
+import com.example.feedct.pojos.AtendimentoDocente;
 
 import java.util.Collections;
 import java.util.LinkedList;

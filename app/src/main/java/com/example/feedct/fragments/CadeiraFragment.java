@@ -3,11 +3,9 @@ package com.example.feedct.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,20 +18,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.feedct.JSONManager;
+import com.example.feedct.DataManager;
 import com.example.feedct.R;
 import com.example.feedct.Session;
 import com.example.feedct.adapters.AtendimentoDocenteAdapter;
-import com.example.feedct.jsonpojos.AtendimentoDocente;
-import com.example.feedct.jsonpojos.Cadeira;
-import com.example.feedct.jsonpojos.CadeiraUser;
+import com.example.feedct.pojos.AtendimentoDocente;
+import com.example.feedct.pojos.Cadeira;
+import com.example.feedct.pojos.CadeiraUser;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class CadeiraFragment extends Fragment {
     private Cadeira cadeira;
-    private List<AtendimentoDocente> atendimentoDocente;
     private CadeiraUser currentCadeiraUser;
 
     private AtendimentoDocenteAdapter adapter;
@@ -45,9 +47,7 @@ public class CadeiraFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cadeira, container, false);
-
-        atendimentoDocente = JSONManager.atendimentoDocentesByCadeira.get(cadeira.getNome());
+        final View view = inflater.inflate(R.layout.fragment_cadeira, container, false);
 
         TextView nomeTextView = view.findViewById(R.id.textViewNome);
         TextView departamentoTextView = view.findViewById(R.id.textViewDepartamento);
@@ -68,32 +68,27 @@ public class CadeiraFragment extends Fragment {
         adapter = new AtendimentoDocenteAdapter();
         recyclerView.setAdapter(adapter);
 
-        adapter.setData(atendimentoDocente);
-
-        if(atendimentoDocente == null || atendimentoDocente.isEmpty())
-            view.findViewById(R.id.labelAtendimentoDocente).setVisibility(View.GONE);
-
         final FloatingActionButton actionButtonInscrever = view.findViewById(R.id.actionButtonInscrever);
         final FloatingActionButton actionButtonDesinscrever = view.findViewById(R.id.actionButtonDesinscrever);
-
-        currentCadeiraUser = null;
-        for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
-            if(cadeiraUser.getEmailUser().equals(Session.userEmail) && cadeiraUser.getNomeCadeira().equals(cadeira.getNome())) {
-                currentCadeiraUser = cadeiraUser;
-                break;
-            }
-        }
-
         final TextView turnoTextView = view.findViewById(R.id.textViewTurno);
-        if (currentCadeiraUser == null) {
-            actionButtonInscrever.show();
-            turnoTextView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            actionButtonDesinscrever.show();
-            turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
-            turnoTextView.setVisibility(View.VISIBLE);
-        }
+
+        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
+                if (documentSnapshots.size() == 1) {
+                    currentCadeiraUser = documentSnapshots.get(0).toObject(CadeiraUser.class);
+                    actionButtonDesinscrever.show();
+                    turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
+                    turnoTextView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    currentCadeiraUser = null;
+                    actionButtonInscrever.show();
+                    turnoTextView.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         actionButtonInscrever.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,10 +107,9 @@ public class CadeiraFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String turno = String.valueOf(numberPicker.getValue());
                         currentCadeiraUser = new CadeiraUser(cadeira.getNome(), Session.userEmail, turno);
-                        JSONManager.cadeiraUsers.add(currentCadeiraUser);
+                        DataManager.db.collection("cadeiraUser").add(currentCadeiraUser);
                         turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
                         turnoTextView.setVisibility(View.VISIBLE);
-
 
                         actionButtonDesinscrever.show();
                         actionButtonInscrever.hide();
@@ -145,7 +139,12 @@ public class CadeiraFragment extends Fragment {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        JSONManager.cadeiraUsers.remove(currentCadeiraUser);
+                        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                queryDocumentSnapshots.getDocuments().get(0).getReference().delete();
+                            }
+                        });
                         turnoTextView.setVisibility(View.INVISIBLE);
 
                         actionButtonInscrever.show();
@@ -163,6 +162,21 @@ public class CadeiraFragment extends Fragment {
                 });
 
                 builder.show();
+            }
+        });
+
+        DataManager.db.collection("atendimentoDocentes").whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<AtendimentoDocente> atendimentoDocentes = new LinkedList<>();
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    atendimentoDocentes.add(document.toObject(AtendimentoDocente.class));
+                }
+
+                adapter.setData(atendimentoDocentes);
+
+                if(atendimentoDocentes.isEmpty())
+                    view.findViewById(R.id.labelAtendimentoDocente).setVisibility(View.GONE);
             }
         });
 

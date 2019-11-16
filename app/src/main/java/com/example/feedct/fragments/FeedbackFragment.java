@@ -1,6 +1,5 @@
 package com.example.feedct.fragments;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,32 +11,36 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.feedct.Departamento;
-import com.example.feedct.JSONManager;
+import com.example.feedct.DataManager;
 import com.example.feedct.R;
 import com.example.feedct.adapters.FeedbackAdapter;
 import com.example.feedct.cadeiracomparators.FeedbackDateComparator;
 import com.example.feedct.cadeiracomparators.FeedbackVotesComparator;
-import com.example.feedct.jsonpojos.Cadeira;
-import com.example.feedct.jsonpojos.CadeiraUser;
-import com.example.feedct.jsonpojos.Curso;
-import com.example.feedct.jsonpojos.Feedback;
+import com.example.feedct.pojos.Cadeira;
+import com.example.feedct.pojos.Curso;
+import com.example.feedct.pojos.Feedback;
+import com.example.feedct.pojos.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import java.util.Map;
 
 public class FeedbackFragment extends Fragment {
     private Cadeira cadeira;
     private boolean[] cursoIsFiltered;
+    private List<Feedback> feedback;
+    private Map<String, List<Feedback>> feedbackByCurso;
     private List<Feedback> currentFeedback;
     private Comparator<Feedback> currentComparator;
 
@@ -63,10 +66,6 @@ public class FeedbackFragment extends Fragment {
         adapter = new FeedbackAdapter();
         recyclerView.setAdapter(adapter);
 
-        currentFeedback = JSONManager.feedbackByCadeira.get(cadeira.getNome());
-        currentComparator = new FeedbackVotesComparator();
-        adapter.setData(currentFeedback, currentComparator);
-
         RadioGroup radioGroup = view.findViewById(R.id.radioGroupOrderBy);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -84,7 +83,7 @@ public class FeedbackFragment extends Fragment {
             }
         });
 
-        cursoIsFiltered = new boolean[JSONManager.cursos.size()];
+        cursoIsFiltered = new boolean[DataManager.cursos.size()];
 
         final Button buttonCurso = view.findViewById(R.id.buttonCurso);
         final ImageButton imageButtonCancelCurso = view.findViewById(R.id.imageButtonCancelCurso);
@@ -97,7 +96,7 @@ public class FeedbackFragment extends Fragment {
                 builder.setTitle("Cursos");
 
                 final List<String> items = new LinkedList<>();
-                for (Curso curso : JSONManager.cursos)
+                for (Curso curso : DataManager.cursos)
                     items.add(curso.getSigla());
 
                 builder.setMultiChoiceItems(items.toArray(new String[0]), cursoIsFiltered, new DialogInterface.OnMultiChoiceClickListener() {
@@ -128,7 +127,7 @@ public class FeedbackFragment extends Fragment {
                 buttonCurso.setText(getString(R.string.cursoFilter));
                 imageButtonCancelCurso.setVisibility(View.GONE);
 
-                currentFeedback = JSONManager.feedbackByCadeira.get(cadeira.getNome());
+                currentFeedback = feedback;
                 adapter.setData(currentFeedback, currentComparator);
             }
         });
@@ -142,15 +141,18 @@ public class FeedbackFragment extends Fragment {
         currentFeedback = new LinkedList<>();
         int i = 0;
 
-        for (Curso curso : JSONManager.cursos) {
+        for (Curso curso : DataManager.cursos) {
             if (cursoIsFiltered[i++]) {
-                currentFeedback.addAll(JSONManager.feedbackByCadeiraAndCurso.get(cadeira.getNome()).get(curso.getSigla()));
+                List<Feedback> f = feedbackByCurso.get(curso.getSigla());
+                if (f != null)
+                    currentFeedback.addAll(f);
+
                 filterText.append(" ").append(curso.getSigla());
             }
         }
 
         if (currentFeedback.isEmpty()) {
-            currentFeedback = JSONManager.feedbacks;
+            currentFeedback = feedback;
             filterText = new StringBuilder(getString(R.string.cursoFilter));
             imageButtonCancelCurso.setVisibility(View.GONE);
         }
@@ -162,5 +164,43 @@ public class FeedbackFragment extends Fragment {
         buttonCurso.setText(filterText.toString());
 
         adapter.setData(currentFeedback, currentComparator);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateFeedback();
+    }
+
+    private void updateFeedback() {
+        DataManager.db.collection("feedback").whereEqualTo("cadeiraName", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                feedback = new LinkedList<>();
+                feedbackByCurso = new HashMap<>();
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                    final Feedback f = documentSnapshot.toObject(Feedback.class);
+                    feedback.add(f);
+                    DataManager.db.collection("users").whereEqualTo("email", f.getUserEmail()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            String curso = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class).getCurso();
+
+                            List<Feedback> aux = feedbackByCurso.get(curso);
+                            if(aux == null) {
+                                aux = new LinkedList<>();
+                                feedbackByCurso.put(curso, aux);
+                            }
+
+                            aux.add(f);
+                        }
+                    });
+                }
+                currentFeedback = feedback;
+                currentComparator = new FeedbackVotesComparator();
+                adapter.setData(currentFeedback, currentComparator);
+            }
+        });
     }
 }

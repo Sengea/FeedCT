@@ -1,4 +1,4 @@
-package com.example.feedct.jsonpojos;
+package com.example.feedct.pojos;
 
 public class AtendimentoDocente implements Comparable<AtendimentoDocente> {
     private String cadeira;
@@ -7,6 +7,10 @@ public class AtendimentoDocente implements Comparable<AtendimentoDocente> {
     private String horaInicio;
     private String horaFim;
     private String sala;
+
+    public AtendimentoDocente() {
+
+    }
 
     public AtendimentoDocente(String cadeira, String professor, String dia, String horaInicio, String horaFim, String sala) {
         this.cadeira = cadeira;

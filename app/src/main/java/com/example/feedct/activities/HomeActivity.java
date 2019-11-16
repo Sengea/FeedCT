@@ -1,15 +1,11 @@
 package com.example.feedct.activities;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.feedct.JSONManager;
 import com.example.feedct.R;
-import com.example.feedct.Session;
 import com.example.feedct.adapters.SectionsPageAdapter;
 import com.example.feedct.fragments.MinhasFragment;
 import com.example.feedct.fragments.NotificacoesFragment;

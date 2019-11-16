@@ -9,19 +9,22 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.feedct.JSONManager;
 import com.example.feedct.R;
 import com.example.feedct.Session;
 import com.example.feedct.adapters.MinhasAdapter;
-import com.example.feedct.jsonpojos.Cadeira;
-import com.example.feedct.jsonpojos.CadeiraUser;
+import com.example.feedct.pojos.Cadeira;
+import com.example.feedct.pojos.CadeiraUser;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MinhasFragment extends Fragment {
-    private List<Cadeira> cadeiras;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private MinhasAdapter adapter;
 
     @Nullable
@@ -36,9 +39,6 @@ public class MinhasFragment extends Fragment {
         adapter = new MinhasAdapter(getContext());
         listView.setAdapter(adapter);
 
-        updateCadeiras();
-        adapter.setData(cadeiras);
-
         return  view;
     }
 
@@ -47,22 +47,34 @@ public class MinhasFragment extends Fragment {
         super.onStart();
 
         updateCadeiras();
-        adapter.setData(cadeiras);
     }
 
     private void updateCadeiras() {
-        List<String> minhasNames = new LinkedList<>();
-        for (CadeiraUser cadeiraUser : JSONManager.cadeiraUsers) {
-            if (cadeiraUser.getEmailUser().equals(Session.userEmail))
-                minhasNames.add(cadeiraUser.getNomeCadeira());
-        }
+        db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<String> minhasNames = new LinkedList<>();
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    minhasNames.add(document.toObject(CadeiraUser.class).getNomeCadeira());
+                }
 
-        cadeiras = new LinkedList<>();
-        for (Cadeira cadeira : JSONManager.cadeiras) {
-            if (minhasNames.contains(cadeira.getNome()))
-                cadeiras.add(cadeira);
-        }
-
-        Collections.sort(cadeiras);
+                if (minhasNames.isEmpty()) {
+                    adapter.setData(new LinkedList<Cadeira>());
+                }
+                else {
+                    db.collection("cadeiras").whereIn("nome", minhasNames).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            List<Cadeira> cadeiras = new LinkedList<>();
+                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                cadeiras.add(document.toObject(Cadeira.class));
+                            }
+                            Collections.sort(cadeiras);
+                            adapter.setData(cadeiras);
+                        }
+                    });
+                }
+            }
+        });
     }
 }
