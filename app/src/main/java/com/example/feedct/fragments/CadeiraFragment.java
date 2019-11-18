@@ -17,11 +17,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.feedct.DataManager;
 import com.example.feedct.R;
 import com.example.feedct.Session;
+import com.example.feedct.activities.CadeiraActivity;
 import com.example.feedct.adapters.AtendimentoDocenteAdapter;
+import com.example.feedct.adapters.SectionsPageAdapter;
 import com.example.feedct.pojos.AtendimentoDocente;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.pojos.CadeiraUser;
@@ -36,12 +39,15 @@ import java.util.List;
 
 public class CadeiraFragment extends Fragment {
     private Cadeira cadeira;
+    private CadeiraActivity activity;
+
     private CadeiraUser currentCadeiraUser;
 
     private AtendimentoDocenteAdapter adapter;
 
-    public CadeiraFragment(Cadeira cadeira) {
+    public CadeiraFragment(Cadeira cadeira, CadeiraActivity activity) {
         this.cadeira = cadeira;
+        this.activity = activity;
     }
 
     @Nullable
@@ -115,6 +121,8 @@ public class CadeiraFragment extends Fragment {
                         actionButtonInscrever.hide();
                         Toast toast = Toast.makeText(context,"Inscrito no turno " + turno + " com sucesso.", Toast.LENGTH_SHORT);
                         toast.show();
+
+                        activity.showExtraTabs();
                     }
                 });
 
@@ -151,6 +159,8 @@ public class CadeiraFragment extends Fragment {
                         actionButtonDesinscrever.hide();
                         Toast toast = Toast.makeText(context,"Desinscrito com sucesso.", Toast.LENGTH_SHORT);
                         toast.show();
+
+                        activity.hideExtraTabs();
                     }
                 });
 
@@ -182,6 +192,4 @@ public class CadeiraFragment extends Fragment {
 
         return view;
     }
-
-
 }

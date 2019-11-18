@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class MinhasFragment extends Fragment {
         db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<String> minhasNames = new LinkedList<>();
+                List<String> minhasNames = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                     minhasNames.add(document.toObject(CadeiraUser.class).getNomeCadeira());
                 }
@@ -65,8 +66,8 @@ public class MinhasFragment extends Fragment {
                     db.collection("cadeiras").whereIn("nome", minhasNames).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<Cadeira> cadeiras = new LinkedList<>();
-                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                            List<Cadeira> cadeiras = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                                 cadeiras.add(document.toObject(Cadeira.class));
                             }
                             Collections.sort(cadeiras);

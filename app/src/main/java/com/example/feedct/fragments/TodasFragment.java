@@ -33,6 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -87,7 +88,7 @@ public class TodasFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("Departamentos");
 
-                final List<String> items = new LinkedList<>();
+                final List<String> items = new ArrayList<>(departamentos.size());
                 for (Departamento departamento : departamentos)
                     items.add(departamento.getName());
 
@@ -293,7 +294,7 @@ public class TodasFragment extends Fragment {
         DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                final List<String> minhasNames = new LinkedList<>();
+                final List<String> minhasNames = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                     minhasNames.add(document.toObject(CadeiraUser.class).getNomeCadeira());
                 }
@@ -302,8 +303,8 @@ public class TodasFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         departamentos = new TreeSet<>();
                         HashMap<String, Departamento> departamentoByName = new HashMap<>();
-                        List<Cadeira> cadeiras = new LinkedList<>();
-                        for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        List<Cadeira> cadeiras = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                             Cadeira cadeira = document.toObject(Cadeira.class);
                             if (!minhasNames.contains(cadeira.getNome())) {
                                 String nomeDepartamento = cadeira.getDepartamento();

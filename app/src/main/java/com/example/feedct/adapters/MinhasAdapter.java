@@ -13,6 +13,7 @@ import com.example.feedct.activities.CadeiraActivity;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.R;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class MinhasAdapter extends BaseAdapter {
 
     public MinhasAdapter(Context context) {
         mContext = context;
-        current_cadeiras = new LinkedList<>();
+        current_cadeiras = new ArrayList<>();
     }
 
     public void setData(List<Cadeira> data) {

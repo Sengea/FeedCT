@@ -24,4 +24,30 @@
     <string name="date">Data</string>
     <string name="votes">Votos</string>
     <string name="cursoFilter">Curso</string>
+    <string name="procuroFilter">Procuro</string>
+    <string name="tenhoFilter">Tenho</string>
+    <string name="turnosFilter">Turnos Aceites</string>
+    <string-array name="turnosOptions">
+        <item>Todos</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+    <string-array name="modoOptions">
+        <item>Aceitam-se pedidos de junção</item>
+        <item>Aceitam-se pedidos automaticamente</item>
+        <item>Não se aceitam pedidos</item>
+    </string-array>
 </resources>

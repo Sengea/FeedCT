@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.feedct.R;
 import com.example.feedct.pojos.AtendimentoDocente;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +21,7 @@ public class AtendimentoDocenteAdapter extends RecyclerView.Adapter<RecyclerView
     private List<AtendimentoDocente> atendimentoDocentes;
 
     public AtendimentoDocenteAdapter() {
-        atendimentoDocentes = new LinkedList<>();
+        atendimentoDocentes = new ArrayList<>();
     }
 
     public void setData(List<AtendimentoDocente> data) {

@@ -2,23 +2,13 @@ package com.example.feedct;
 
 import android.content.res.Resources;
 
-import com.example.feedct.adapters.DateAdapter;
-import com.example.feedct.pojos.AtendimentoDocente;
-import com.example.feedct.pojos.Cadeira;
-import com.example.feedct.pojos.CadeiraUser;
 import com.example.feedct.pojos.Curso;
-import com.example.feedct.pojos.Feedback;
-import com.example.feedct.pojos.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 

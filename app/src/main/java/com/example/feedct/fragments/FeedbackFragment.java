@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -95,7 +96,7 @@ public class FeedbackFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("Cursos");
 
-                final List<String> items = new LinkedList<>();
+                final List<String> items = new ArrayList<>(DataManager.cursos.size());
                 for (Curso curso : DataManager.cursos)
                     items.add(curso.getSigla());
 
@@ -138,7 +139,7 @@ public class FeedbackFragment extends Fragment {
 
     private void applyCursoFilter(Button buttonCurso, ImageButton imageButtonCancelCurso) {
         StringBuilder filterText = new StringBuilder();
-        currentFeedback = new LinkedList<>();
+        currentFeedback = new ArrayList<>();
         int i = 0;
 
         for (Curso curso : DataManager.cursos) {

@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -31,7 +32,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<Feedback> feedback;
 
     public FeedbackAdapter() {
-        feedback = new LinkedList<>();
+        feedback = new ArrayList<>();
     }
 
     public void setData(List<Feedback> data, Comparator<Feedback> comparator) {
