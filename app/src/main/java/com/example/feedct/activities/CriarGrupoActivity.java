@@ -21,9 +21,11 @@ import com.example.feedct.Session;
 import com.example.feedct.adapters.CriarGrupoAdapter;
 import com.example.feedct.pojos.CadeiraUser;
 import com.example.feedct.pojos.Grupo;
+import com.example.feedct.pojos.PedidoGrupo;
 import com.example.feedct.pojos.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shawnlin.numberpicker.NumberPicker;
@@ -39,6 +41,7 @@ import ir.mirrajabi.searchdialog.core.SearchResultListener;
 public class CriarGrupoActivity extends AppCompatActivity {
     private CriarGrupoAdapter adapter;
     private Grupo grupo;
+    private List<String> convites;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
         final String cadeiraName = getIntent().getStringExtra("Cadeira");
 
         final ImageButton imageButtonAddElement = findViewById(R.id.imageButtonAdicionarConvite);
-        DataManager.db.collection("cadeiraUser").whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<String> userEmails = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
@@ -63,14 +66,14 @@ public class CriarGrupoActivity extends AppCompatActivity {
                     userEmails.add(documentSnapshot.toObject(CadeiraUser.class).getEmailUser());
                 }
 
-                DataManager.db.collection("users").whereIn("email", userEmails).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.USERS).whereIn("email", userEmails).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         final List<User> users = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                             users.add(documentSnapshot.toObject(User.class));
                         }
-                        DataManager.db.collection("grupos").whereEqualTo("cadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        DataManager.db.collection(DataManager.GRUPOS).whereEqualTo("cadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<Grupo> grupos = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
@@ -95,7 +98,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
                                 Collections.sort(userNames);
 
                                 grupo = new Grupo(cadeiraName, Session.userEmail);
-                                adapter = new CriarGrupoAdapter(grupo, userNames);
+                                convites = new ArrayList<>();
+                                adapter = new CriarGrupoAdapter(convites, userNames);
                                 recyclerView.setAdapter(adapter);
                             }
                         });
@@ -164,8 +168,23 @@ public class CriarGrupoActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataManager.db.collection("grupos").add(grupo);
-                onBackPressed();
+                DataManager.db.collection(DataManager.GRUPOS).add(grupo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(final DocumentReference documentReference) {
+                        DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("sender", Session.userEmail).whereEqualTo("cadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                    documentSnapshot.getReference().delete();
+                                }
+
+                                for(String convite : convites)
+                                    DataManager.db.collection(DataManager.PEDIDOS_GRUPO).add(new PedidoGrupo(cadeiraName, PedidoGrupo.GROUP_TO_USER, documentReference.getId(), convite));
+                                onBackPressed();
+                            }
+                        });
+                    }
+                });
             }
         });
     }

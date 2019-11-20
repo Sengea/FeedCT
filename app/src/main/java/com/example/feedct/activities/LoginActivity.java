@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Login");
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorWhite));
 
         Button buttonLogin = findViewById(R.id.login);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 final String username = usernameEditText.getText().toString() + usernameTextInputLayout.getSuffixText();
                 final String password = passwordEditText.getText().toString();
 
-                DataManager.db.collection("users").whereEqualTo("email", username).whereEqualTo("password", password).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.USERS).whereEqualTo("email", username).whereEqualTo("password", password).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();

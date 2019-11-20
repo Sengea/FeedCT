@@ -31,13 +31,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CriarGrupoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
-    private Grupo grupo;
+    private List<String> convites;
     private List<User> current_elementos;
     private ArrayList<SearchableUser> userNames;
 
-    public CriarGrupoAdapter(Grupo grupo, ArrayList<SearchableUser> userNames) {
+    public CriarGrupoAdapter(List<String> convites, ArrayList<SearchableUser> userNames) {
         current_elementos = new ArrayList<>();
-        this.grupo = grupo;
+        this.convites = convites;
         this.userNames = userNames;
     }
 
@@ -60,7 +60,7 @@ public class CriarGrupoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return;
 
         userNames.remove(item);
-        grupo.getConvites().add(item.getUser().getEmail());
+        convites.add(item.getUser().getEmail());
         current_elementos.add(user);
         this.notifyDataSetChanged();
     }
@@ -71,7 +71,7 @@ public class CriarGrupoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         userNames.add(new SearchableUser(element.getNome() + " - " + element.getNumero(), element));
         Collections.sort(userNames);
-        grupo.getConvites().remove(element.getEmail());
+        convites.remove(element.getEmail());
         current_elementos.remove(element);
         this.notifyDataSetChanged();
     }

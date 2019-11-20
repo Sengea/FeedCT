@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,9 +28,11 @@ import com.example.feedct.Session;
 import com.example.feedct.adapters.CriarGrupoAdapter;
 import com.example.feedct.pojos.CadeiraUser;
 import com.example.feedct.pojos.Grupo;
+import com.example.feedct.pojos.PedidoGrupo;
 import com.example.feedct.pojos.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shawnlin.numberpicker.NumberPicker;
@@ -45,14 +48,23 @@ import ir.mirrajabi.searchdialog.core.SearchResultListener;
 public class EditarGrupoActivity extends AppCompatActivity {
     private CriarGrupoAdapter adapter;
     private Grupo grupo;
+    private List<String> initialConvites;
+    private List<String> convites;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_editar_grupo);
+
+        final FrameLayout loadingScreen = findViewById(R.id.loadingScreen);
         getSupportActionBar().setTitle("Editar Grupo");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final FloatingActionButton floatingActionButtonLeave = findViewById(R.id.floatingActionButtonLeave);
+        final FloatingActionButton floatingActionButtonConfirm = findViewById(R.id.floatingActionButtonConfirm);
+        floatingActionButtonLeave.hide();
+        floatingActionButtonConfirm.hide();
 
         //Setup recycler view
         final RecyclerView recyclerView = findViewById(R.id.recyclerViewConvitesGrupo);
@@ -65,7 +77,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
         final String cadeiraName = getIntent().getStringExtra("Cadeira");
 
         final ImageButton imageButtonAdicionarConvite = findViewById(R.id.imageButtonAdicionarConvite);
-        DataManager.db.collection("cadeiraUser").whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<String> userEmails = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
@@ -73,7 +85,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
                     userEmails.add(documentSnapshot.toObject(CadeiraUser.class).getEmailUser());
                 }
 
-                DataManager.db.collection("users").whereIn("email", userEmails).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.USERS).whereIn("email", userEmails).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         final List<User> users = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
@@ -81,7 +93,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
                             users.add(documentSnapshot.toObject(User.class));
                         }
 
-                        DataManager.db.collection("grupos").whereEqualTo("cadeira",cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        DataManager.db.collection(DataManager.GRUPOS).whereEqualTo("cadeira",cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<User> grupoUsers = new ArrayList<>();
@@ -99,42 +111,56 @@ public class EditarGrupoActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                DataManager.db.collection("grupos").document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         grupo = documentSnapshot.toObject(Grupo.class);
-                                        if (grupo.getConvites() == null)
-                                            grupo.initializeConvites();
                                         numberPickerMaxElementos.setMinValue(grupo.getElementos().size());
                                         numberPickerMaxElementos.setValue(grupo.getMaxElementos());
 
-                                        final List<User> usersConvidados = new ArrayList<>();
-                                        final ArrayList<SearchableUser> stringUsersConvidados = new ArrayList<>();
-                                        final ArrayList<SearchableUser> userNames = new ArrayList<>(users.size());
-                                        for (User user : users) {
-                                            if (!grupo.getConvites().contains(user.getEmail()))
-                                                userNames.add(new SearchableUser(user.getNome() + " - " + user.getNumero(), user));
-                                            else {
-                                                usersConvidados.add(user);
-                                                stringUsersConvidados.add(new SearchableUser(user.getNome() + " - " + user.getNumero(), user));
-                                            }
-                                        }
-
-                                        Collections.sort(userNames);
-
-                                        DataManager.db.collection("users").whereIn("email", grupo.getElementos()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("sender", grupoId).whereEqualTo("type", PedidoGrupo.GROUP_TO_USER).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                initialConvites = new ArrayList<>();
+                                                convites = new ArrayList<>();
                                                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                                                    User user = documentSnapshot.toObject(User.class);
-                                                    View viewElemento = LayoutInflater.from(EditarGrupoActivity.this).inflate(R.layout.layout_elemento_grupo, null);
-                                                    ((TextView) viewElemento.findViewById(R.id.textViewNomeElemento)).setText(user.getNome() + " - " + user.getNumero());
-                                                    linearLayoutElementos.addView(viewElemento);
+                                                    String convite = documentSnapshot.toObject(PedidoGrupo.class).getReceiver();
+                                                    initialConvites.add(convite);
+                                                    convites.add(convite);
                                                 }
 
-                                                adapter = new CriarGrupoAdapter(grupo, userNames);
-                                                recyclerView.setAdapter(adapter);
-                                                adapter.setData(usersConvidados, stringUsersConvidados);
+                                                final List<User> usersConvidados = new ArrayList<>();
+                                                final ArrayList<SearchableUser> stringUsersConvidados = new ArrayList<>();
+                                                final ArrayList<SearchableUser> userNames = new ArrayList<>(users.size());
+                                                for (User user : users) {
+                                                    if (!convites.contains(user.getEmail()))
+                                                        userNames.add(new SearchableUser(user.getNome() + " - " + user.getNumero(), user));
+                                                    else {
+                                                        usersConvidados.add(user);
+                                                        stringUsersConvidados.add(new SearchableUser(user.getNome() + " - " + user.getNumero(), user));
+                                                    }
+                                                }
+
+                                                Collections.sort(userNames);
+
+                                                DataManager.db.collection(DataManager.USERS).whereIn("email", grupo.getElementos()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                                            User user = documentSnapshot.toObject(User.class);
+                                                            View viewElemento = LayoutInflater.from(EditarGrupoActivity.this).inflate(R.layout.layout_elemento_grupo, null);
+                                                            ((TextView) viewElemento.findViewById(R.id.textViewNomeElemento)).setText(user.getNome() + " - " + user.getNumero());
+                                                            linearLayoutElementos.addView(viewElemento);
+                                                        }
+
+                                                        adapter = new CriarGrupoAdapter(convites, userNames);
+                                                        recyclerView.setAdapter(adapter);
+                                                        adapter.setData(usersConvidados, stringUsersConvidados);
+                                                        floatingActionButtonLeave.show();
+                                                        floatingActionButtonConfirm.show();
+                                                        loadingScreen.setVisibility(View.GONE);
+                                                    }
+                                                });
                                             }
                                         });
                                     }
@@ -190,7 +216,6 @@ public class EditarGrupoActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton floatingActionButtonConfirm = findViewById(R.id.floatingActionButtonConfirm);
         floatingActionButtonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,11 +225,38 @@ public class EditarGrupoActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataManager.db.collection("grupos").document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                documentSnapshot.getReference().delete();
-                                DataManager.db.collection("grupos").add(grupo);
+                                int mode = grupo.getMode();
+                                int maxElementos = grupo.getMaxElementos();
+
+                                for (String convite : convites) {
+                                    if (!initialConvites.contains(convite))
+                                        DataManager.db.collection(DataManager.PEDIDOS_GRUPO).add(new PedidoGrupo(cadeiraName, PedidoGrupo.GROUP_TO_USER, grupoId, convite));
+                                }
+
+                                List<String> convitesToRemove = new ArrayList<>();
+                                for (String convite : initialConvites) {
+                                    if (!convites.contains(convite)) {
+                                        convitesToRemove.add(convite);
+                                    }
+                                }
+
+                                if (!convitesToRemove.isEmpty()) {
+                                    DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("sender", grupoId).whereIn("receiver", convitesToRemove).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots)
+                                                documentSnapshot.getReference().delete();
+                                        }
+                                    });
+                                }
+
+                                DocumentReference ref = documentSnapshot.getReference();
+                                ref.update("mode", mode);
+                                ref.update("maxElementos", maxElementos);
+
                                 onBackPressed();
                             }
                         });
@@ -222,21 +274,45 @@ public class EditarGrupoActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton floatingActionButtonDelete = findViewById(R.id.floatingActionButtonDelete);
-        floatingActionButtonDelete.setOnClickListener(new View.OnClickListener() {
+        floatingActionButtonLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle("Tem a certeza que deseja eliminar este grupo?");
+                builder.setTitle("Tem a certeza que deseja sair este grupo?");
 
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataManager.db.collection("grupos").document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                documentSnapshot.getReference().delete();
-                                onBackPressed();
+                            public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                                if (grupo.getElementos().size() == 1) {
+                                    documentSnapshot.getReference().delete();
+                                    DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("sender", grupoId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                                documentSnapshot.getReference().delete();
+                                            }
+
+                                            DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("receiver", grupoId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                                        documentSnapshot.getReference().delete();
+                                                    }
+                                                    onBackPressed();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                else {
+                                    List<String> elementos = grupo.getElementos();
+                                    elementos.remove(Session.userEmail);
+                                    documentSnapshot.getReference().update("elementos", elementos);
+                                    onBackPressed();
+                                }
                             }
                         });
                     }

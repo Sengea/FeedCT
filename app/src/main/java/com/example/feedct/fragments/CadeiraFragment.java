@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ import java.util.List;
 public class CadeiraFragment extends Fragment {
     private Cadeira cadeira;
     private CadeiraActivity activity;
+    private FrameLayout loadingScreen;
 
     private CadeiraUser currentCadeiraUser;
 
@@ -54,6 +56,9 @@ public class CadeiraFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_cadeira, container, false);
+
+        loadingScreen = view.findViewById(R.id.loadingScreen);
+        loadingScreen.setVisibility(View.VISIBLE);
 
         TextView nomeTextView = view.findViewById(R.id.textViewNome);
         TextView departamentoTextView = view.findViewById(R.id.textViewDepartamento);
@@ -78,7 +83,7 @@ public class CadeiraFragment extends Fragment {
         final FloatingActionButton actionButtonDesinscrever = view.findViewById(R.id.actionButtonDesinscrever);
         final TextView turnoTextView = view.findViewById(R.id.textViewTurno);
 
-        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
@@ -93,6 +98,23 @@ public class CadeiraFragment extends Fragment {
                     actionButtonInscrever.show();
                     turnoTextView.setVisibility(View.INVISIBLE);
                 }
+
+                DataManager.db.collection(DataManager.ATENDIMENTO_DOCENTE).whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<AtendimentoDocente> atendimentoDocentes = new LinkedList<>();
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            atendimentoDocentes.add(document.toObject(AtendimentoDocente.class));
+                        }
+
+                        if(atendimentoDocentes.isEmpty())
+                            view.findViewById(R.id.labelAtendimentoDocente).setVisibility(View.GONE);
+
+                        adapter.setData(atendimentoDocentes);
+
+                        loadingScreen.setVisibility(View.GONE);
+                    }
+                });
             }
         });
 
@@ -113,7 +135,7 @@ public class CadeiraFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String turno = String.valueOf(numberPicker.getValue());
                         currentCadeiraUser = new CadeiraUser(cadeira.getNome(), Session.userEmail, turno);
-                        DataManager.db.collection("cadeiraUser").add(currentCadeiraUser);
+                        DataManager.db.collection(DataManager.CADEIRA_USER).add(currentCadeiraUser);
                         turnoTextView.setText(String.format(getString(R.string.inscrito_em), currentCadeiraUser.getTurno()));
                         turnoTextView.setVisibility(View.VISIBLE);
 
@@ -122,7 +144,7 @@ public class CadeiraFragment extends Fragment {
                         Toast toast = Toast.makeText(context,"Inscrito no turno " + turno + " com sucesso.", Toast.LENGTH_SHORT);
                         toast.show();
 
-                        activity.showExtraTabs();
+                        activity.showExtraTabs(currentCadeiraUser);
                     }
                 });
 
@@ -147,7 +169,7 @@ public class CadeiraFragment extends Fragment {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 queryDocumentSnapshots.getDocuments().get(0).getReference().delete();
@@ -175,20 +197,7 @@ public class CadeiraFragment extends Fragment {
             }
         });
 
-        DataManager.db.collection("atendimentoDocentes").whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<AtendimentoDocente> atendimentoDocentes = new LinkedList<>();
-                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                    atendimentoDocentes.add(document.toObject(AtendimentoDocente.class));
-                }
 
-                adapter.setData(atendimentoDocentes);
-
-                if(atendimentoDocentes.isEmpty())
-                    view.findViewById(R.id.labelAtendimentoDocente).setVisibility(View.GONE);
-            }
-        });
 
         return view;
     }

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:text="TextView"
+        android:text="Andre Moura"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,6 +21,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/textViewNomeElemento"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textViewNomeElemento" />
 
@@ -34,6 +35,6 @@
         android:scaleY="0.8"
         app:layout_constraintBottom_toBottomOf="@+id/view6"
         app:layout_constraintStart_toEndOf="@+id/view6"
-        app:layout_constraintTop_toTopOf="@+id/view6"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintTop_toTopOf="@+id/textViewNomeElemento"
+        app:srcCompat="@drawable/ic_account_minus" />
 </androidx.constraintlayout.widget.ConstraintLayout>

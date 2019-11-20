@@ -13,6 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataManager {
+    public static final String ATENDIMENTO_DOCENTE = "atendimentoDocentes";
+    public static final String CADEIRA_USER = "cadeiraUser";
+    public static final String CADEIRAS = "cadeiras";
+    public static final String CURSOS = "cursos";
+    public static final String FEEDBACK = "feedback";
+    public static final String GRUPOS = "grupos";
+    public static final String PEDIDOS_GRUPO = "pedidosGrupo";
+    public static final String USERS = "users";
+    public static final String PEDIDOS_TURNOS = "pedidosTurnos";
+    public static final String TROCA_TURNOS = "trocaTurnos";
     public static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Resources resources;
 
@@ -24,7 +34,7 @@ public class DataManager {
     }
 
     private void readCursos() {
-        db.collection("cursos").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(CURSOS).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 cursos = new LinkedList<>();

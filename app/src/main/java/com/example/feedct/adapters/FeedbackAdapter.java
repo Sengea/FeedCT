@@ -19,6 +19,7 @@ import com.example.feedct.pojos.Feedback;
 import com.example.feedct.pojos.User;
 import com.example.feedct.pojos.UserVote;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -27,21 +28,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private List<Feedback> feedback;
+    private Map<Feedback, User> userByFeedback;
 
     public FeedbackAdapter() {
         feedback = new ArrayList<>();
     }
 
-    public void setData(List<Feedback> data, Comparator<Feedback> comparator) {
+    public void setData(List<Feedback> data, Map<Feedback, User> userByFeedback, Comparator<Feedback> comparator) {
         if (data == null)
             return;
 
         feedback.clear();
         feedback.addAll(data);
         Collections.sort(feedback, comparator);
+        this.userByFeedback = userByFeedback;
 
         this.notifyDataSetChanged();
     }
@@ -55,7 +59,8 @@ public class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((FeedbackAdapter.MyItem) holder).setup(feedback.get(position));
+        Feedback f = feedback.get(position);
+        ((FeedbackAdapter.MyItem) holder).setup(f, userByFeedback.get(f));
     }
 
     @Override
@@ -84,75 +89,67 @@ public class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imageButtonDownVote = itemView.findViewById(R.id.imageButtonDownVote);
         }
 
-        public void setup(final Feedback feedback) {
-            DataManager.db.collection("users").whereEqualTo("email", feedback.getUserEmail()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
+        public void setup(final Feedback feedback, final User user) {
+            nameTextView.setText(user.getNome());
+            dateTextView.setText(feedback.getDate());
+            opinionTextView.setText(feedback.getOpinion());
+            cursoTextView.setText(user.getCurso());
+            votesTextView.setText(String.valueOf(feedback.getVotes()));
 
-                    nameTextView.setText(user.getNome());
-                    dateTextView.setText(feedback.getDate());
-                    opinionTextView.setText(feedback.getOpinion());
-                    cursoTextView.setText(user.getCurso());
-                    votesTextView.setText(String.valueOf(feedback.getVotes()));
+            boolean userUpVoted = feedback.getUpVotes().contains(Session.userEmail);
+            boolean userDownVoted = feedback.getDownVotes().contains(Session.userEmail);
 
-                    DataManager.db.collection("votes")
-                        .whereEqualTo("feedbackCadeiraName", feedback.getCadeiraName())
-                        .whereEqualTo("feedbackUserEmail", feedback.getUserEmail())
-                        .whereEqualTo("userEmail", Session.userEmail)
-                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
-                                if (documentSnapshots.size() == 1) {
-                                    UserVote userVote = documentSnapshots.get(0).toObject(UserVote.class);
-                                    if (userVote.getVoteType() == UserVote.UP_VOTE) {
-                                        imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_filled);
-                                    }
-                                    else if (userVote.getVoteType() == UserVote.DOWN_VOTE) {
-                                        imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_filled);
-                                    }
-                                }
-                                else {
-                                    imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_empty);
-                                    imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_empty);
-                                }
-                            }
-                    });
-                }
-            });
+            if (userUpVoted) {
+                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up_filled);
+                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down);
+            }
+            else if (userDownVoted) {
+                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down_filled);
+                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up);
+            }
+            else {
+                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up);
+                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down);
+            }
 
             imageButtonUpVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DataManager.db.collection("votes")
-                            .whereEqualTo("feedbackCadeiraName", feedback.getCadeiraName())
-                            .whereEqualTo("feedbackUserEmail", feedback.getUserEmail())
-                            .whereEqualTo("userEmail", Session.userEmail)
+                    DataManager.db.collection(DataManager.FEEDBACK)
+                            .whereEqualTo("userEmail", feedback.getUserEmail())
+                            .whereEqualTo("cadeiraName", feedback.getCadeiraName())
                             .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
-                            if (documentSnapshots.size() == 1) {
-                                UserVote userVote = documentSnapshots.get(0).toObject(UserVote.class);
-                                if (userVote.getVoteType() == UserVote.UP_VOTE) {
-                                    documentSnapshots.get(0).getReference().delete();
-                                    feedback.downVote(1);
-                                    imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_empty);
-                                }
-                                else if (userVote.getVoteType() == UserVote.DOWN_VOTE) {
-                                    documentSnapshots.get(0).getReference().update("voteType", UserVote.UP_VOTE);
-                                    feedback.upVote(2);
-                                    imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_filled);
-                                    imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_empty);
-                                }
+                            DocumentReference ref = queryDocumentSnapshots.getDocuments().get(0).getReference();
+
+                            boolean userUpVoted = feedback.getUpVotes().contains(Session.userEmail);
+                            boolean userDownVoted = feedback.getDownVotes().contains(Session.userEmail);
+
+                            if (userUpVoted) {
+                                feedback.getUpVotes().remove(Session.userEmail);
+                                feedback.downVote(1);
+                                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("upVotes", feedback.getUpVotes());
+                            }
+                            else if (userDownVoted) {
+                                feedback.getUpVotes().add(Session.userEmail);
+                                feedback.getDownVotes().remove(Session.userEmail);
+                                feedback.upVote(2);
+                                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up_filled);
+                                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("upVotes", feedback.getUpVotes());
+                                ref.update("downVotes", feedback.getDownVotes());
                             }
                             else {
-                                DataManager.db.collection("votes").add(new UserVote(feedback.getCadeiraName(), feedback.getUserEmail(), Session.userEmail, UserVote.UP_VOTE));
+                                feedback.getUpVotes().add(Session.userEmail);
                                 feedback.upVote(1);
-                                imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_filled);
+                                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up_filled);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("upVotes", feedback.getUpVotes());
                             }
-
                             votesTextView.setText(String.valueOf(feedback.getVotes()));
                         }
                     });
@@ -162,34 +159,41 @@ public class FeedbackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imageButtonDownVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DataManager.db.collection("votes")
-                            .whereEqualTo("feedbackCadeiraName", feedback.getCadeiraName())
-                            .whereEqualTo("feedbackUserEmail", feedback.getUserEmail())
-                            .whereEqualTo("userEmail", Session.userEmail)
+                    DataManager.db.collection(DataManager.FEEDBACK)
+                            .whereEqualTo("userEmail", feedback.getUserEmail())
+                            .whereEqualTo("cadeiraName", feedback.getCadeiraName())
                             .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
-                            if (documentSnapshots.size() == 1) {
-                                UserVote userVote = documentSnapshots.get(0).toObject(UserVote.class);
-                                if (userVote.getVoteType() == UserVote.UP_VOTE) {
-                                    documentSnapshots.get(0).getReference().update("voteType", UserVote.DOWN_VOTE);
-                                    feedback.downVote(2);
-                                    imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_filled);
-                                    imageButtonUpVote.setBackgroundResource(R.drawable.ic_up_arrow_empty);
-                                }
-                                else if (userVote.getVoteType() == UserVote.DOWN_VOTE) {
-                                    documentSnapshots.get(0).getReference().delete();
-                                    feedback.upVote(1);
-                                    imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_empty);
-                                }
+                            DocumentReference ref = queryDocumentSnapshots.getDocuments().get(0).getReference();
+
+                            boolean userUpVoted = feedback.getUpVotes().contains(Session.userEmail);
+                            boolean userDownVoted = feedback.getDownVotes().contains(Session.userEmail);
+
+                            if (userUpVoted) {
+                                feedback.getUpVotes().remove(Session.userEmail);
+                                feedback.getDownVotes().add(Session.userEmail);
+                                feedback.downVote(2);
+                                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down_filled);
+                                imageButtonUpVote.setBackgroundResource(R.drawable.ic_thumb_up);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("upVotes", feedback.getUpVotes());
+                                ref.update("downVotes", feedback.getDownVotes());
+                            }
+                            else if (userDownVoted) {
+                                feedback.getDownVotes().remove(Session.userEmail);
+                                feedback.upVote(1);
+                                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("downVotes", feedback.getDownVotes());
                             }
                             else {
-                                DataManager.db.collection("votes").add(new UserVote(feedback.getCadeiraName(), feedback.getUserEmail(), Session.userEmail, UserVote.DOWN_VOTE));
+                                feedback.getDownVotes().add(Session.userEmail);
                                 feedback.downVote(1);
-                                imageButtonDownVote.setBackgroundResource(R.drawable.ic_down_arrow_filled);
+                                imageButtonDownVote.setBackgroundResource(R.drawable.ic_thumb_down_filled);
+                                ref.update("votes", feedback.getVotes());
+                                ref.update("downVotes", feedback.getDownVotes());
                             }
-
                             votesTextView.setText(String.valueOf(feedback.getVotes()));
                         }
                     });

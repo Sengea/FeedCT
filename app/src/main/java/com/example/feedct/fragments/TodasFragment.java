@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -25,12 +26,11 @@ import com.example.feedct.Departamento;
 import com.example.feedct.R;
 import com.example.feedct.Session;
 import com.example.feedct.adapters.TodasAdapter;
-import com.example.feedct.cadeiracomparators.CadeiraNameComparator;
+import com.example.feedct.comparators.CadeiraNameComparator;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.pojos.CadeiraUser;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -54,12 +54,15 @@ public class TodasFragment extends Fragment {
 
     private Button buttonDepartamento;
     private ImageButton imageButtonCancelDepartamento;
+    private FrameLayout loadingScreen;
 
     @Nullable
     @Override
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_todas, container, false);
+
+        loadingScreen = view.findViewById(R.id.loadingScreen);
 
         //Setup recycler view
         RecyclerView recyclerView = view.findViewById(R.id.todasRecyclerView);
@@ -291,14 +294,15 @@ public class TodasFragment extends Fragment {
     }
 
     private void updateDepartamentos() {
-        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        loadingScreen.setVisibility(View.VISIBLE);
+        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 final List<String> minhasNames = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                     minhasNames.add(document.toObject(CadeiraUser.class).getNomeCadeira());
                 }
-                DataManager.db.collection("cadeiras").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.CADEIRAS).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         departamentos = new TreeSet<>();
@@ -337,6 +341,8 @@ public class TodasFragment extends Fragment {
                         else {
                             updateAdapterData();
                         }
+
+                        loadingScreen.setVisibility(View.GONE);
                     }
                 });
             }

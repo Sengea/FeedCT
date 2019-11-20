@@ -207,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
                     cursoTextInputLayout.setError("Campo obrigatório");
                 }
 
-                DataManager.db.collection("users").whereEqualTo("email", email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.USERS).whereEqualTo("email", email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
@@ -219,7 +219,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
                         if (doRegistry && !emailIsTaken) {
-                            DataManager.db.collection("users").add(new User(email, password, name, Integer.valueOf(number), curso));
+                            DataManager.db.collection(DataManager.USERS).add(new User(email, password, name, Integer.valueOf(number), curso));
                             Toast toast = Toast.makeText(v.getContext(), "Conta criada com sucesso.", Toast.LENGTH_SHORT);
                             toast.show();
 
@@ -227,14 +227,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-                /*if (doRegistry) {
-                    DataManager.db.collection("users").add(new User(email, password, name, Integer.valueOf(number), curso));
-                    Toast toast = Toast.makeText(v.getContext(), "Conta criada com sucesso.", Toast.LENGTH_SHORT);
-                    toast.show();
-
-                    v.getContext().startActivity(new Intent(v.getContext(), LoginActivity.class));
-                }*/
             }
         });
     }

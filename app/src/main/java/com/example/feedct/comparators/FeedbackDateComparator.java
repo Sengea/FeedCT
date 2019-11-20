@@ -1,4 +1,4 @@
-package com.example.feedct.cadeiracomparators;
+package com.example.feedct.comparators;
 
 import com.example.feedct.pojos.Feedback;
 

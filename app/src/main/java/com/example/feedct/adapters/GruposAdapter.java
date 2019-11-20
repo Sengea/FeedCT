@@ -39,32 +39,25 @@ public class GruposAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Map<Grupo, String> current_idByGrupo;
     private Cadeira cadeira;
     private CadeiraUser cadeiraUser;
+    private Map<Grupo, List<String>> current_userNamesByGrupo;
+    private Grupo current_userGrupo;
 
     public GruposAdapter(Cadeira cadeira) {
         current_grupos = new ArrayList<>();
         this.cadeira = cadeira;
     }
 
-    public void setData(final List<Grupo> data, final Map<Grupo, String> idByGrupo) {
+    public void setData(final List<Grupo> data, final Map<Grupo, String> idByGrupo, final Map<Grupo, List<String>> userNamesByGrupo, CadeiraUser cadeiraUser, Grupo userGrupo) {
         if (data == null)
             return;
 
-        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                 if (queryDocumentSnapshots.getDocuments().size() == 1)
-                     cadeiraUser = queryDocumentSnapshots.getDocuments().get(0).toObject(CadeiraUser.class);
-                 else
-                     cadeiraUser = null;
-
-                current_grupos.clear();
-                current_grupos.addAll(data);
-                current_idByGrupo = idByGrupo;
-                GruposAdapter.this.notifyDataSetChanged();
-            }
-        });
-
-
+        this.cadeiraUser = cadeiraUser;
+        current_grupos.clear();
+        current_grupos.addAll(data);
+        current_idByGrupo = idByGrupo;
+        current_userNamesByGrupo = userNamesByGrupo;
+        current_userGrupo = userGrupo;
+        GruposAdapter.this.notifyDataSetChanged();
     }
 
     @NonNull
@@ -77,7 +70,7 @@ public class GruposAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Grupo grupo = current_grupos.get(position);
-        ((GruposAdapter.MyItem) holder).setup(grupo, current_idByGrupo.get(grupo));
+        ((GruposAdapter.MyItem) holder).setup(grupo, current_idByGrupo.get(grupo), current_userNamesByGrupo.get(grupo), current_userGrupo);
     }
 
     @Override
@@ -88,6 +81,7 @@ public class GruposAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class MyItem extends RecyclerView.ViewHolder {
         private Context mContext;
         private CadeiraUser cadeiraUser;
+        private boolean joinable;
 
         private CardView cardView;
         private LinearLayout linearLayout;
@@ -105,33 +99,26 @@ public class GruposAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
         }
 
-        public void setup(final Grupo grupo, final String grupoId) {
+        public void setup(final Grupo grupo, final String grupoId, final List<String> userNames, final Grupo userGrupo) {
             linearLayout.removeAllViews();
 
-            DataManager.db.collection("users").whereIn("email", grupo.getElementos()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    List<String> userNames = new ArrayList<>(grupo.getElementos().size());
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                        userNames.add(documentSnapshot.toObject(User.class).getNome());
-                    }
-                    Collections.sort(userNames);
-                    for (String userName : userNames) {
-                        View viewElemento = LayoutInflater.from(itemView.getContext()).inflate(R.layout.layout_elemento_grupo, null);
-                        ((TextView) viewElemento.findViewById(R.id.textViewNomeElemento)).setText(userName);
-                        linearLayout.addView(viewElemento);
-                    }
-                }
-            });
+            Collections.sort(userNames);
+            for (String userName : userNames) {
+                View viewElemento = LayoutInflater.from(itemView.getContext()).inflate(R.layout.layout_elemento_grupo, null);
+                ((TextView) viewElemento.findViewById(R.id.textViewNomeElemento)).setText(userName);
+                linearLayout.addView(viewElemento);
+            }
 
+            joinable = false;
             if (grupo.getElementos().contains(Session.userEmail)) {
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorMyGroup));
             }
-            else if(grupo.getMode() == Grupo.MODE_NO_REQUESTS || (!grupo.getTurnos().equals("Todos") && !grupo.getTurnos().equals(cadeiraUser.getTurno()))) {
+            else if(grupo.getMode() == Grupo.MODE_NO_REQUESTS || (!grupo.getTurnos().equals("Todos") && !grupo.getTurnos().equals(cadeiraUser.getTurno())) || (userGrupo != null && grupo.getElementos().size() + userGrupo.getElementos().size() > Math.max(grupo.getMaxElementos(), userGrupo.getMaxElementos()))){
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorOtherDisabledGroup));
             }
             else {
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorOtherAvailableGroup));
+                joinable = true;
             }
 
             textViewMaxElementos.setText(grupo.getElementos().size() + "/" + grupo.getMaxElementos());
@@ -146,6 +133,7 @@ public class GruposAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         intent = new Intent(v.getContext(), DetalhesGrupoActivity.class);
                     intent.putExtra("GrupoId", grupoId);
                     intent.putExtra("Cadeira", cadeiraUser.getNomeCadeira());
+                    intent.putExtra("Joinable", joinable);
                     v.getContext().startActivity(intent);
                 }
             });

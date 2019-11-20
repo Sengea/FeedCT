@@ -19,7 +19,6 @@ public class Grupo implements Comparable<Grupo> {
 
     private String cadeira;
     private List<String> elementos;
-    private List<String> convites;
     private int maxElementos;
     private String turnos;
     private int mode;
@@ -30,16 +29,14 @@ public class Grupo implements Comparable<Grupo> {
         this.cadeira = cadeira;
         elementos = new LinkedList<>();
         elementos.add(elemento);
-        convites = new LinkedList<>();
         maxElementos = 2;
         turnos = "Todos";
         mode = MODE_REQUESTS;
     }
 
-    public Grupo(String cadeira, List<String> elementos, List<String> convites, int maxElementos) {
+    public Grupo(String cadeira, List<String> elementos, int maxElementos) {
         this.cadeira = cadeira;
         this.elementos = elementos;
-        this.convites = convites;
         this.maxElementos = maxElementos;
     }
 
@@ -49,10 +46,6 @@ public class Grupo implements Comparable<Grupo> {
 
     public List<String> getElementos() {
         return elementos;
-    }
-
-    public List<String> getConvites() {
-        return convites;
     }
 
     public int getMaxElementos() {
@@ -77,10 +70,6 @@ public class Grupo implements Comparable<Grupo> {
 
     public void setMode(int mode) {
         this.mode = mode;
-    }
-
-    public void initializeConvites() {
-        convites = new ArrayList<>();
     }
 
     @Override

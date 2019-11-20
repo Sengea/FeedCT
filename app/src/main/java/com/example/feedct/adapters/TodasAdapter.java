@@ -82,7 +82,7 @@ public class TodasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemViewHolder = new MySection(v);
         }
         else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cadeira, parent, false);
             itemViewHolder = new MyElement(v);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -16,7 +16,9 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="abcabcabcabcabcabcabcabcabc"
+        android:textColor="#B3000000"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +40,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Departamento"
+        android:textStyle="bold"
+        android:textColor="#B3000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNome" />
 
@@ -56,6 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="Semestre"
+        android:textStyle="bold"
+        android:textColor="#B3000000"
         app:layout_constraintStart_toEndOf="@+id/labelDepartamento"
         app:layout_constraintTop_toTopOf="@+id/labelDepartamento" />
 
@@ -74,6 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="ECTS"
+        android:textStyle="bold"
+        android:textColor="#B3000000"
         app:layout_constraintStart_toEndOf="@+id/labelSemestre"
         app:layout_constraintTop_toTopOf="@+id/labelSemestre" />
 
@@ -108,6 +116,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Atendimento Docentes"
+        android:textColor="#B3000000"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDepartamento" />
 
@@ -115,28 +125,31 @@
         android:id="@+id/actionButtonInscrever"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:tint="#FFFFFF"
         android:visibility="invisible"
-        app:backgroundTint="#8BC34A"
+        app:backgroundTint="@color/colorPrimary"
+        app:tint="#FFFFFF"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@drawable/ic_plus_symbol" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/actionButtonDesinscrever"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorAccent"
         android:clickable="true"
-        android:tint="#F4F4FF"
         android:visibility="invisible"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_delete_symbol"
+        app:tint="#FFFFFF" />
 
     <TextView
         android:id="@+id/textViewTurno"
@@ -148,5 +161,13 @@
         app:layout_constraintBottom_toBottomOf="@+id/actionButtonDesinscrever"
         app:layout_constraintEnd_toStartOf="@+id/actionButtonDesinscrever"
         app:layout_constraintTop_toTopOf="@+id/actionButtonDesinscrever" />
+
+    <include
+        layout="@layout/layout_loading"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

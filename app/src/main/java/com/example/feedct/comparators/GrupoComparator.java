@@ -1,16 +1,17 @@
-package com.example.feedct.cadeiracomparators;
+package com.example.feedct.comparators;
 
 import com.example.feedct.Session;
-import com.example.feedct.pojos.CadeiraUser;
 import com.example.feedct.pojos.Grupo;
 
 import java.util.Comparator;
 
 public class GrupoComparator implements Comparator<Grupo> {
     private String userTurno;
+    private Grupo userGrupo;
 
-    public GrupoComparator(String userTurno) {
+    public GrupoComparator(String userTurno, Grupo userGrupo) {
         this.userTurno = userTurno;
+        this.userGrupo = userGrupo;
     }
 
     @Override
@@ -57,7 +58,27 @@ public class GrupoComparator implements Comparator<Grupo> {
                         }
                         else {
                             //o1 is not full. o2 is not full
-                            result = o2.getElementos().size() - o1.getElementos().size();
+                            if (userGrupo != null) {
+                                if (userGrupo.getElementos().size() + o1.getElementos().size() > Math.max(userGrupo.getMaxElementos(), o1.getMaxElementos())) {
+                                    if (userGrupo.getElementos().size() + o2.getElementos().size() > Math.max(userGrupo.getMaxElementos(), o2.getMaxElementos())) {
+                                        result = o2.getElementos().size() - o1.getElementos().size();
+                                        //Cannot merge with o1. Cannot merge with o2
+                                    } else {
+                                        result = 1;
+                                        //Cannot merge with o1. Can merge with o2
+                                    }
+                                } else {
+                                    if (userGrupo.getElementos().size() + o2.getElementos().size() > Math.max(userGrupo.getMaxElementos(), o2.getMaxElementos())) {
+                                        result = -1;
+                                        //Can merge with o1. Cannot merge with o2
+                                    } else {
+                                        result = o2.getElementos().size() - o1.getElementos().size();
+                                        //Cannot merge with o1. Can merge with o2
+                                    }
+                                }
+                            }
+                            else
+                                result = o2.getElementos().size() - o1.getElementos().size();
                         }
                     }
                 }

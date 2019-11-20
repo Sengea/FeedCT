@@ -14,7 +14,6 @@ import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.R;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MinhasAdapter extends BaseAdapter {
@@ -52,7 +51,7 @@ public class MinhasAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cadeira_layout, null);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cadeira, null);
 
         TextView siglaTextView = convertView.findViewById(R.id.sigla);
         TextView nomeTextView = convertView.findViewById(R.id.nome);

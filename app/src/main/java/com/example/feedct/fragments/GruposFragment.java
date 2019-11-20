@@ -4,36 +4,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.feedct.DataManager;
-import com.example.feedct.Departamento;
 import com.example.feedct.R;
 import com.example.feedct.Session;
-import com.example.feedct.activities.CadeiraActivity;
 import com.example.feedct.activities.CriarGrupoActivity;
-import com.example.feedct.activities.RegisterActivity;
 import com.example.feedct.adapters.GruposAdapter;
-import com.example.feedct.adapters.TodasAdapter;
-import com.example.feedct.cadeiracomparators.GrupoComparator;
+import com.example.feedct.comparators.GrupoComparator;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.pojos.CadeiraUser;
 import com.example.feedct.pojos.Grupo;
+import com.example.feedct.pojos.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,11 +35,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 
 public class GruposFragment extends Fragment {
@@ -59,6 +49,11 @@ public class GruposFragment extends Fragment {
     private ImageButton imageButtonCancelTurnos;
     private FloatingActionButton floatingActionButton;
 
+    private List<Grupo> grupoList;
+    private Grupo userGrupo;
+
+    private FrameLayout loadingScreen;
+
     public GruposFragment(Cadeira cadeira) {
         this.cadeira = cadeira;
     }
@@ -68,6 +63,8 @@ public class GruposFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grupos, container, false);
 
+        loadingScreen = view.findViewById(R.id.loadingScreen);
+
         //Setup recycler view
         RecyclerView recyclerView = view.findViewById(R.id.gruposRecyclerView);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -76,6 +73,7 @@ public class GruposFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         floatingActionButton = view.findViewById(R.id.actionButtonCriarGrupo);
+        floatingActionButton.hide();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +112,7 @@ public class GruposFragment extends Fragment {
         });
 
         imageButtonCancelTurnos = view.findViewById(R.id.imageButtonCancelTurnos);
+        imageButtonCancelTurnos.setVisibility(View.GONE);
         imageButtonCancelTurnos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,35 +172,87 @@ public class GruposFragment extends Fragment {
     }
 
     private void updateAdapterData() {
-        DataManager.db.collection("cadeiraUser").whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        loadingScreen.setVisibility(View.VISIBLE);
+        DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 final String userTurno = queryDocumentSnapshots.getDocuments().get(0).toObject(CadeiraUser.class).getTurno();
-                DataManager.db.collection("grupos").whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                DataManager.db.collection(DataManager.GRUPOS).whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        Map<Grupo, String> idByGrupo = new HashMap<>();
-                        List<Grupo> grupoList = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
-                        boolean userHasGroup = false;
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
+                        final Map<Grupo, String> idByGrupo = new HashMap<>();
+                        grupoList = new ArrayList<>(queryDocumentSnapshots.getDocuments().size());
+                        List<String> elementosList = new ArrayList<>();
+                        userGrupo = null;
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                             Grupo grupo = documentSnapshot.toObject(Grupo.class);
                             grupoList.add(grupo);
                             idByGrupo.put(grupo, documentSnapshot.getId());
                             if (grupo.getElementos().contains(Session.userEmail))
-                                userHasGroup = true;
+                                userGrupo = grupo;
+                            elementosList.addAll(grupo.getElementos());
                         }
 
-                        if (userHasGroup)
-                            floatingActionButton.hide();
-                        else
-                            floatingActionButton.show();
 
                         grupoList = applyTurnosFilter(grupoList);
-                        Collections.sort(grupoList, new GrupoComparator(userTurno));
-                        adapter.setData(grupoList, idByGrupo);
+                        Collections.sort(grupoList, new GrupoComparator(userTurno, userGrupo));
+
+                        if (elementosList.isEmpty()) {
+                            DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    CadeiraUser cadeiraUser = queryDocumentSnapshots.getDocuments().get(0).toObject(CadeiraUser.class);
+
+                                    adapter.setData(grupoList, idByGrupo, new HashMap<Grupo, List<String>>(), cadeiraUser, userGrupo);
+
+                                    if (userGrupo != null)
+                                        floatingActionButton.hide();
+                                    else
+                                        floatingActionButton.show();
+
+                                    loadingScreen.setVisibility(View.GONE);
+                                }
+                            });
+                        } else {
+                            DataManager.db.collection(DataManager.USERS).whereIn("email", elementosList).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    final Map<Grupo, List<String>> userNamesByGrupo = new HashMap<>();
+                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                        User user = documentSnapshot.toObject(User.class);
+                                        for (Grupo grupo : grupoList) {
+                                            if (grupo.getElementos().contains(user.getEmail())) {
+                                                List<String> userNames = userNamesByGrupo.get(grupo);
+                                                if (userNames == null) {
+                                                    userNames = new ArrayList<>(grupo.getElementos().size());
+                                                    userNamesByGrupo.put(grupo, userNames);
+                                                }
+                                                userNames.add(user.getNome());
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("emailUser", Session.userEmail).whereEqualTo("nomeCadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            CadeiraUser cadeiraUser = queryDocumentSnapshots.getDocuments().get(0).toObject(CadeiraUser.class);
+
+                                            adapter.setData(grupoList, idByGrupo, userNamesByGrupo, cadeiraUser, userGrupo);
+
+                                            if (userGrupo != null)
+                                                floatingActionButton.hide();
+                                            else
+                                                floatingActionButton.show();
+
+                                            loadingScreen.setVisibility(View.GONE);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
-
             }
         });
     }
