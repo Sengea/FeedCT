@@ -128,10 +128,11 @@ public class TurnosFragment extends Fragment {
                             priorityByTurno.put(which + 1, priorityByTurno.size());
                         }
                         else {
-                            priorityByTurno.remove(which + 1);
+                            int priority = priorityByTurno.remove(which + 1);
 
                             for (Map.Entry<Integer, Integer> entry : priorityByTurno.entrySet()) {
-                                priorityByTurno.put(entry.getKey(), entry.getValue() - 1);
+                                if (entry.getValue() > priority)
+                                    priorityByTurno.put(entry.getKey(), entry.getValue() - 1);
                             }
                             if (priorityByTurno.size() == 0)
                                 priorityByTurno = null;
@@ -228,8 +229,9 @@ public class TurnosFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 final WriteBatch batch = DataManager.db.batch();
-                                batch.delete(queryDocumentSnapshots.getDocuments().get(0).getReference());
-                                DataManager.db.collection(DataManager.PEDIDOS_TURNOS).whereEqualTo("sender", Session.userEmail).whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                                batch.delete(documentSnapshot.getReference());
+                                DataManager.db.collection(DataManager.PEDIDOS_TURNOS).whereEqualTo("receiver", documentSnapshot.getId()).whereEqualTo("cadeira", cadeira.getNome()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
@@ -266,6 +268,7 @@ public class TurnosFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        priorityByTurno = null;
         updateAdapterData();
     }
 

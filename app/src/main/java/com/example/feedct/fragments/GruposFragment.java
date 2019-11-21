@@ -120,7 +120,7 @@ public class GruposFragment extends Fragment {
                     turnoIsFiltered[i] = false;
                 }
 
-                buttonTurnos.setText(getString(R.string.departamentoFilter));
+                buttonTurnos.setText(getString(R.string.turnosFilter));
                 imageButtonCancelTurnos.setVisibility(View.GONE);
 
                 updateAdapterData();

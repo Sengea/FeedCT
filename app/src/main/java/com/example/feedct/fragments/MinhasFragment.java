@@ -66,6 +66,7 @@ public class MinhasFragment extends Fragment {
 
                 if (minhasNames.isEmpty()) {
                     adapter.setData(new LinkedList<Cadeira>());
+                    loadingScreen.setVisibility(View.GONE);
                 }
                 else {
                     DataManager.db.collection(DataManager.CADEIRAS).whereIn("nome", minhasNames).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

@@ -149,8 +149,10 @@ public class FeedbackFragment extends Fragment {
         currentFeedback = new ArrayList<>();
         int i = 0;
 
+        boolean isFiltered = false;
         for (Curso curso : DataManager.cursos) {
             if (cursoIsFiltered[i++]) {
+                isFiltered = true;
                 List<Feedback> f = feedbackByCurso.get(curso.getSigla());
                 if (f != null)
                     currentFeedback.addAll(f);
@@ -159,17 +161,16 @@ public class FeedbackFragment extends Fragment {
             }
         }
 
-        if (currentFeedback.isEmpty()) {
-            currentFeedback = feedback;
-            filterText = new StringBuilder(getString(R.string.cursoFilter));
+        if (!isFiltered) {
             imageButtonCancelCurso.setVisibility(View.GONE);
+            buttonCurso.setText(getString(R.string.turnosFilter));
+            currentFeedback = feedback;
         }
         else {
             filterText = new StringBuilder(filterText.toString().trim().replace(" ", ", "));
             imageButtonCancelCurso.setVisibility(View.VISIBLE);
+            buttonCurso.setText(filterText.toString());
         }
-
-        buttonCurso.setText(filterText.toString());
 
         adapter.setData(currentFeedback, userByFeedback, currentComparator);
     }

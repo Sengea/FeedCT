@@ -3,6 +3,7 @@ package com.example.feedct.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,15 @@ import com.example.feedct.adapters.SectionsPageAdapter;
 import com.example.feedct.pojos.AtendimentoDocente;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.pojos.CadeiraUser;
+import com.example.feedct.pojos.Grupo;
+import com.example.feedct.pojos.PedidoTurnos;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -173,6 +177,84 @@ public class CadeiraFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 queryDocumentSnapshots.getDocuments().get(0).getReference().delete();
+                                DataManager.db.collection(DataManager.GRUPOS).whereEqualTo("cadeira", cadeira.getNome()).whereArrayContains("elementos", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        if (queryDocumentSnapshots.getDocuments().size() > 0) {
+                                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                                            final String grupoID = documentSnapshot.getId();
+                                            Grupo grupo = documentSnapshot.toObject(Grupo.class);
+                                            if (grupo.getElementos().size() == 1) {
+                                                documentSnapshot.getReference().delete();
+                                                //Eliminate group to user and group to group requests
+                                                DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("sender", grupoID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                            documentSnapshot.getReference().delete();
+
+                                                        DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("receiver", grupoID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                                    documentSnapshot.getReference().delete();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                // Remove user from group
+                                                List<String> elementos = grupo.getElementos();
+                                                elementos.remove(Session.userEmail);
+                                                documentSnapshot.getReference().update("elementos", elementos);
+                                            }
+
+                                        }
+                                        else {
+                                            DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("sender", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                        documentSnapshot.getReference().delete();
+
+                                                    DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("receiver", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                                documentSnapshot.getReference().delete();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+
+                                        DataManager.db.collection(DataManager.TROCA_TURNOS).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("userEmail", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                if (queryDocumentSnapshots.getDocuments().size() > 0) {
+                                                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                                                    final String trocaTurnosId = documentSnapshot.getId();
+                                                    documentSnapshot.getReference().delete();
+                                                    DataManager.db.collection(DataManager.PEDIDOS_TURNOS).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("trocaTurnosId", trocaTurnosId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                                documentSnapshot.getReference().delete();
+                                                        }
+                                                    });
+                                                }
+                                                DataManager.db.collection(DataManager.PEDIDOS_TURNOS).whereEqualTo("cadeira", cadeira.getNome()).whereEqualTo("sender", Session.userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
+                                                            documentSnapshot.getReference().delete();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                         turnoTextView.setVisibility(View.INVISIBLE);

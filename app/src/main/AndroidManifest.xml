@@ -14,6 +14,7 @@
         <activity android:name=".activities.CriarGrupoActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activities.EditarGrupoActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activities.DetalhesGrupoActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.DetalhesTrocaTurnosActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activities.CriarTrocaTurnosActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.LoginActivity"

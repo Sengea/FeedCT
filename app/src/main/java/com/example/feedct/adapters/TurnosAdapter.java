@@ -22,6 +22,7 @@ import com.example.feedct.DataManager;
 import com.example.feedct.R;
 import com.example.feedct.Session;
 import com.example.feedct.activities.DetalhesGrupoActivity;
+import com.example.feedct.activities.DetalhesTrocaTurnosActivity;
 import com.example.feedct.activities.EditarGrupoActivity;
 import com.example.feedct.pojos.Cadeira;
 import com.example.feedct.pojos.CadeiraUser;
@@ -91,7 +92,7 @@ public class TurnosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private ConstraintLayout constraintLayout;
         private TextView textViewNome, textViewTem, textViewQuer;
         private ImageButton imageButtonSend;
-
+        private boolean joinable;
 
         public MyItem(@NonNull View itemView) {
             super(itemView);
@@ -120,10 +121,12 @@ public class TurnosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             textViewQuer.setText(queroString);
 
             if (trocaTurnos.getUserEmail().equals(Session.userEmail)) {
+                joinable = false;
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorMyGroup));
                 imageButtonSend.setVisibility(View.GONE);
             }
             else if (trocaTurnos.getProcuro().contains(cadeiraUser.getTurno())) {
+                joinable = true;
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorOtherAvailableGroup));
                 imageButtonSend.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -155,10 +158,22 @@ public class TurnosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 imageButtonSend.setVisibility(View.VISIBLE);
             }
             else {
+                joinable = false;
                 constraintLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorOtherDisabledGroup));
                 imageButtonSend.setVisibility(View.GONE);
             }
 
+            itemView.findViewById(R.id.cardView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), DetalhesTrocaTurnosActivity.class);
+                    intent.putExtra("UserEmail", user.getEmail());
+                    intent.putExtra("Cadeira", cadeiraUser.getNomeCadeira());
+                    intent.putExtra("UserTurno", cadeiraUser.getTurno());
+                    intent.putExtra("Joinable", joinable);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }

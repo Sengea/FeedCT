@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -223,7 +224,7 @@ public class CriarTrocaTurnosActivity extends AppCompatActivity {
                                                             DataManager.db.collection(DataManager.TROCA_TURNOS).add(new TrocaTurnos(cadeiraName, Session.userEmail, procuro, cadeiraUser.getTurno())).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                 @Override
                                                                 public void onSuccess(DocumentReference documentReference) {
-                                                                    onBackPressed();
+                                                                    finish();
                                                                 }
                                                             });
                                                         }
@@ -233,7 +234,7 @@ public class CriarTrocaTurnosActivity extends AppCompatActivity {
                                                     DataManager.db.collection(DataManager.TROCA_TURNOS).add(new TrocaTurnos(cadeiraName, Session.userEmail, procuro, cadeiraUser.getTurno())).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
-                                                            onBackPressed();
+                                                            finish();
                                                         }
                                                     });
                                                 }
@@ -246,7 +247,7 @@ public class CriarTrocaTurnosActivity extends AppCompatActivity {
                                                 DataManager.db.collection(DataManager.TROCA_TURNOS).add(new TrocaTurnos(cadeiraName, Session.userEmail, procuro, cadeiraUser.getTurno())).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        onBackPressed();
+                                                        finish();
                                                     }
                                                 });
                                             }
@@ -260,7 +261,7 @@ public class CriarTrocaTurnosActivity extends AppCompatActivity {
                                 DataManager.db.collection(DataManager.TROCA_TURNOS).add(new TrocaTurnos(cadeiraName, Session.userEmail, procuro, cadeiraUser.getTurno())).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
-                                        onBackPressed();
+                                        finish();
                                     }
                                 });
                             }
@@ -273,7 +274,7 @@ public class CriarTrocaTurnosActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }

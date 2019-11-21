@@ -62,7 +62,7 @@ public class CriarGrupoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         userNames.remove(item);
         convites.add(item.getUser().getEmail());
         current_elementos.add(user);
-        this.notifyDataSetChanged();
+        this.notifyItemInserted(convites.size() - 1);
     }
 
     public void removeElement(User element) {
@@ -71,9 +71,21 @@ public class CriarGrupoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         userNames.add(new SearchableUser(element.getNome() + " - " + element.getNumero(), element));
         Collections.sort(userNames);
-        convites.remove(element.getEmail());
-        current_elementos.remove(element);
-        this.notifyDataSetChanged();
+
+        int position = -1;
+        for (int i = 0; i < convites.size(); i++) {
+            if (convites.get(i).equals(element.getEmail())) {
+                position = i;
+                break;
+            }
+        }
+
+        if (position != -1){
+            convites.remove(element.getEmail());
+            current_elementos.remove(element);
+            this.notifyItemRemoved(position);
+
+        }
     }
 
     @NonNull

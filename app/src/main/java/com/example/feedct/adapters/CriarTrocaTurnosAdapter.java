@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.feedct.DataManager;
 import com.example.feedct.R;
 
 import java.util.Collections;
@@ -29,24 +30,43 @@ public class CriarTrocaTurnosAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void addElement(String turno) {
         options.remove(Integer.valueOf(Integer.parseInt(turno)));
         procuro.add(turno);
-        this.notifyDataSetChanged();
+        this.notifyItemInserted(procuro.size() - 1);
     }
 
     public void removeElement(String turno) {
         options.add(Integer.parseInt(turno));
         Collections.sort(options);
-        procuro.remove(turno);
-        this.notifyDataSetChanged();
+        int position = -1;
+        for (int i = 0; i < procuro.size(); i++) {
+            if (procuro.get(i).equals(turno)) {
+                position = i;
+                break;
+            }
+        }
+
+        if (position != -1){
+            procuro.remove(turno);
+
+            this.notifyItemRemoved(position);
+            for (int i = position; i < getItemCount(); i++ ){
+                this.notifyItemChanged(i);
+            }
+        }
     }
 
     public void moveUp(int position) {
         Collections.swap(procuro, position, position - 1);
-        this.notifyDataSetChanged();
+        this.notifyItemMoved(position, position - 1);
+        this.notifyItemChanged(position);
+        this.notifyItemChanged(position - 1);
     }
 
     public void moveDown(int position) {
+        if (position != this.getItemCount())
         Collections.swap(procuro, position, position + 1);
-        this.notifyDataSetChanged();
+        this.notifyItemMoved(position, position + 1);
+        this.notifyItemChanged(position);
+        this.notifyItemChanged(position + 1);
     }
 
     @NonNull
@@ -76,6 +96,9 @@ public class CriarTrocaTurnosAdapter extends RecyclerView.Adapter<RecyclerView.V
         private ImageButton imageButtonMoveUp;
         private ImageButton imageButtonMoveDown;
 
+        private boolean moveUpEnabled;
+        private boolean moveDownEnabled;
+
         public MyItem(@NonNull View itemView, CriarTrocaTurnosAdapter adapter) {
             super(itemView);
             this.adapter = adapter;
@@ -88,50 +111,58 @@ public class CriarTrocaTurnosAdapter extends RecyclerView.Adapter<RecyclerView.V
             imageButtonMoveDown = itemView.findViewById(R.id.imageButtonMoveDown);
         }
 
-        public void setup(final String turno, final int currentOpcao, final int totalOpcoes) {
-            textViewPrioridade.setText(String.valueOf(currentOpcao));
+        public void setup(final String turno, int current, int total) {
+            textViewPrioridade.setText(String.valueOf(getAdapterPosition() + 1));
             textViewProcuro.setText(turno);
 
             imageButtonRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     adapter.removeElement(turno);
-                    Toast toast = Toast.makeText(mContext, "Turno " + turno + " removido.", Toast.LENGTH_SHORT);
-                    toast.show();
+                    /*Toast toast = Toast.makeText(mContext, "Turno " + turno + " removido.", Toast.LENGTH_SHORT);
+                    toast.show();*/
                 }
             });
-
-            if (currentOpcao == 1) {
-                imageButtonMoveUp.setVisibility(View.INVISIBLE);
-                if (totalOpcoes == 1)
-                    imageButtonMoveDown.setVisibility(View.INVISIBLE);
-                else
-                    imageButtonMoveDown.setVisibility(View.VISIBLE);
-            }
-            else if (currentOpcao == totalOpcoes)
-                imageButtonMoveDown.setVisibility(View.INVISIBLE);
-            else {
-                imageButtonMoveUp.setVisibility(View.VISIBLE);
-                imageButtonMoveDown.setVisibility(View.VISIBLE);
-            }
 
             imageButtonMoveUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapter.moveUp(currentOpcao - 1);
-                    Toast toast = Toast.makeText(mContext, "Prioridade do turno " + turno + " aumentada.", Toast.LENGTH_SHORT);
-                    toast.show();
+                    updateArrowsEnabled();
+                    if (moveUpEnabled)
+                        adapter.moveUp(getAdapterPosition());
+                    else
+                        Toast.makeText(mContext,"Este turno já tem a prioridade máxima.", Toast.LENGTH_SHORT).show();
                 }
             });
 
             imageButtonMoveDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapter.moveDown(currentOpcao - 1);
-                    Toast toast = Toast.makeText(mContext, "Prioridade do turno " + turno + " diminuida.", Toast.LENGTH_SHORT);
-                    toast.show();
+                    updateArrowsEnabled();
+                    if (moveDownEnabled)
+                        adapter.moveDown(getAdapterPosition());
+                    else
+                        Toast.makeText(mContext,"Este turno já tem a prioridade mínima.", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        private void updateArrowsEnabled() {
+            if (getAdapterPosition() == 0) {
+                moveUpEnabled = false;
+                if (adapter.getItemCount() == 1)
+                    moveDownEnabled = false;
+                else
+                    moveDownEnabled = true;
+            }
+            else if (getAdapterPosition() == adapter.getItemCount() - 1) {
+                moveUpEnabled = true;
+                moveDownEnabled = false;
+            }
+            else {
+                moveUpEnabled = true;
+                moveDownEnabled = true;
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Criar Grupo");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final FrameLayout loadingScreen = findViewById(R.id.loadingScreen);
+
         //Setup recycler view
         final RecyclerView recyclerView = findViewById(R.id.recyclerViewConvitesGrupo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,6 +61,9 @@ public class CriarGrupoActivity extends AppCompatActivity {
         final String cadeiraName = getIntent().getStringExtra("Cadeira");
 
         final ImageButton imageButtonAddElement = findViewById(R.id.imageButtonAdicionarConvite);
+        final FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButtonConfirm);
+        floatingActionButton.hide();
+        loadingScreen.setVisibility(View.VISIBLE);
         DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -101,6 +107,8 @@ public class CriarGrupoActivity extends AppCompatActivity {
                                 convites = new ArrayList<>();
                                 adapter = new CriarGrupoAdapter(convites, userNames);
                                 recyclerView.setAdapter(adapter);
+                                floatingActionButton.show();
+                                loadingScreen.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -164,7 +172,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButtonConfirm);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,7 +188,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
 
                                 for(String convite : convites)
                                     DataManager.db.collection(DataManager.PEDIDOS_GRUPO).add(new PedidoGrupo(cadeiraName, PedidoGrupo.GROUP_TO_USER, documentReference.getId(), convite));
-                                onBackPressed();
+                                finish();
                             }
                         });
                     }
@@ -191,7 +199,7 @@ public class CriarGrupoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }

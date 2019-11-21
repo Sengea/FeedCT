@@ -76,7 +76,26 @@ public class EditarGrupoActivity extends AppCompatActivity {
         final String grupoId = getIntent().getStringExtra("GrupoId");
         final String cadeiraName = getIntent().getStringExtra("Cadeira");
 
+        final AppCompatSpinner spinnerModo = findViewById(R.id.spinnerModo);
+        ArrayAdapter<CharSequence> modoAdapter = ArrayAdapter.createFromResource(this, R.array.modoOptions, android.R.layout.simple_spinner_item);
+        modoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerModo.setAdapter(modoAdapter);
+        spinnerModo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (grupo != null)
+                    grupo.setMode(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         final ImageButton imageButtonAdicionarConvite = findViewById(R.id.imageButtonAdicionarConvite);
+
+        loadingScreen.setVisibility(View.VISIBLE);
         DataManager.db.collection(DataManager.CADEIRA_USER).whereEqualTo("nomeCadeira", cadeiraName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -115,8 +134,13 @@ public class EditarGrupoActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         grupo = documentSnapshot.toObject(Grupo.class);
-                                        numberPickerMaxElementos.setMinValue(grupo.getElementos().size());
+                                        int nElements = grupo.getElementos().size();
+                                        if (nElements > 1)
+                                            numberPickerMaxElementos.setMinValue(grupo.getElementos().size());
+                                        else
+                                            numberPickerMaxElementos.setMinValue(2);
                                         numberPickerMaxElementos.setValue(grupo.getMaxElementos());
+                                        spinnerModo.setSelection(grupo.getMode());
 
                                         DataManager.db.collection(DataManager.PEDIDOS_GRUPO).whereEqualTo("sender", grupoId).whereEqualTo("type", PedidoGrupo.GROUP_TO_USER).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
@@ -190,23 +214,6 @@ public class EditarGrupoActivity extends AppCompatActivity {
             }
         });
 
-        AppCompatSpinner spinnerModo = findViewById(R.id.spinnerModo);
-        ArrayAdapter<CharSequence> modoAdapter = ArrayAdapter.createFromResource(this, R.array.modoOptions, android.R.layout.simple_spinner_item);
-        modoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerModo.setAdapter(modoAdapter);
-        spinnerModo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (grupo != null)
-                    grupo.setMode(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
 
         numberPickerMaxElementos.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -225,6 +232,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        loadingScreen.setVisibility(View.VISIBLE);
                         DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -257,7 +265,8 @@ public class EditarGrupoActivity extends AppCompatActivity {
                                 ref.update("mode", mode);
                                 ref.update("maxElementos", maxElementos);
 
-                                onBackPressed();
+                                loadingScreen.setVisibility(View.GONE);
+                                finish();
                             }
                         });
                     }
@@ -283,6 +292,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        loadingScreen.setVisibility(View.VISIBLE);
                         DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(final DocumentSnapshot documentSnapshot) {
@@ -301,7 +311,8 @@ public class EditarGrupoActivity extends AppCompatActivity {
                                                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                                                         documentSnapshot.getReference().delete();
                                                     }
-                                                    onBackPressed();
+                                                    loadingScreen.setVisibility(View.GONE);
+                                                    finish();
                                                 }
                                             });
                                         }
@@ -311,7 +322,8 @@ public class EditarGrupoActivity extends AppCompatActivity {
                                     List<String> elementos = grupo.getElementos();
                                     elementos.remove(Session.userEmail);
                                     documentSnapshot.getReference().update("elementos", elementos);
-                                    onBackPressed();
+                                    loadingScreen.setVisibility(View.GONE);
+                                    finish();
                                 }
                             }
                         });
@@ -332,7 +344,7 @@ public class EditarGrupoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }

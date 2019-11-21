@@ -59,6 +59,7 @@ public class DetalhesGrupoActivity extends AppCompatActivity {
 
         floatingActionButtonSend.hide();
         floatingActionButtonMerge.hide();
+        loadingScreen.setVisibility(View.VISIBLE);
 
         DataManager.db.collection(DataManager.GRUPOS).document(grupoId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -184,7 +185,7 @@ public class DetalhesGrupoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }

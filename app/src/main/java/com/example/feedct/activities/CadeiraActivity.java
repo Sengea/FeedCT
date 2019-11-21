@@ -139,7 +139,7 @@ public class CadeiraActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 }
